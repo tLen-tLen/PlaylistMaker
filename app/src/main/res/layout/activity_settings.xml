@@ -45,8 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="21dp"
-            android:layout_marginTop="21dp"
+            android:layout_marginBottom="@dimen/settings_item_mb"
+            android:layout_marginTop="@dimen/settings_item_mt"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -60,77 +60,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="6dp"/>
+                android:layout_marginEnd="6dp"
+                android:backgroundTint="#966456"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="21dp"
-            android:layout_marginTop="21dp"
-            >
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_weight="1"
-                android:text="@string/share_app"
-                android:textColor="@color/YP_black"
-                android:textSize="@dimen/settings_item_size"
-                />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:src="@drawable/share"
-                android:layout_marginEnd="@dimen/settings_item_me"/>
-        </LinearLayout>
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="21dp"
-            android:layout_marginTop="21dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_weight="1"
-                android:text="@string/write_support"
-                android:textColor="@color/YP_black"
-                android:textSize="@dimen/settings_item_size"
-                />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:src="@drawable/support"
-                android:layout_marginEnd="@dimen/settings_item_me"/>
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:text="@string/share_app"
+            android:textColor="@color/YP_black"
+            android:textSize="@dimen/settings_item_size"
+            android:layout_marginBottom="@dimen/settings_item_mb"
+            android:layout_marginTop="@dimen/settings_item_mt"
+            android:layout_marginEnd="@dimen/settings_item_me"
+            app:drawableEndCompat="@drawable/share"
+            />
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="21dp"
-            android:layout_marginTop="21dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_weight="1"
-                android:text="@string/terms_of_use"
-                android:textColor="@color/YP_black"
-                android:textSize="@dimen/settings_item_size"
-                />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:src="@drawable/arrow_forward"
-                android:layout_marginEnd="@dimen/settings_item_me"/>
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:text="@string/write_support"
+            android:textColor="@color/YP_black"
+            android:textSize="@dimen/settings_item_size"
+            android:layout_marginBottom="@dimen/settings_item_mb"
+            android:layout_marginTop="@dimen/settings_item_mt"
+            android:layout_marginEnd="@dimen/settings_item_me"
+            app:drawableEndCompat="@drawable/support"
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:text="@string/terms_of_use"
+            android:textColor="@color/YP_black"
+            android:textSize="@dimen/settings_item_size"
+            android:layout_marginBottom="@dimen/settings_item_mb"
+            android:layout_marginTop="@dimen/settings_item_mt"
+            android:layout_marginEnd="@dimen/settings_item_me"
+            app:drawableEndCompat="@drawable/arrow_forward" />
+
+
     </LinearLayout>
 </LinearLayout>
