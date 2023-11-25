@@ -3,8 +3,6 @@ package com.example.playlistmaker
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
