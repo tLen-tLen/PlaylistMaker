@@ -2,7 +2,7 @@
 <resources>
     <style name="SettingsItemTextView">
         <item name="android:layout_gravity">start</item>
-        <item name="android:textColor">@color/YP_black</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">@dimen/settings_item_size</item>
         <item name="android:layout_marginBottom">@dimen/settings_item_mb</item>
         <item name="android:layout_marginTop">@dimen/settings_item_mt</item>
