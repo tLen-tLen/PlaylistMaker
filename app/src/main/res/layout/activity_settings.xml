@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="36dp">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/arrow_black"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="2dp"
+            android:contentDescription="@string/back_button" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/settings"
+            android:textColor="@color/YP_black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:layout_marginStart="12dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/settings_item_mb"
+            android:layout_marginTop="@dimen/settings_item_mt"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/dark_theme"
+                android:textColor="@color/YP_black"
+                android:textSize="@dimen/settings_item_size"
+                />
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="6dp"
+                android:backgroundTint="#966456"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:text="@string/share_app"
+            android:textColor="@color/YP_black"
+            android:textSize="@dimen/settings_item_size"
+            android:layout_marginBottom="@dimen/settings_item_mb"
+            android:layout_marginTop="@dimen/settings_item_mt"
+            android:layout_marginEnd="@dimen/settings_item_me"
+            app:drawableEndCompat="@drawable/share"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:text="@string/write_support"
+            android:textColor="@color/YP_black"
+            android:textSize="@dimen/settings_item_size"
+            android:layout_marginBottom="@dimen/settings_item_mb"
+            android:layout_marginTop="@dimen/settings_item_mt"
+            android:layout_marginEnd="@dimen/settings_item_me"
+            app:drawableEndCompat="@drawable/support"
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:text="@string/terms_of_use"
+            android:textColor="@color/YP_black"
+            android:textSize="@dimen/settings_item_size"
+            android:layout_marginBottom="@dimen/settings_item_mb"
+            android:layout_marginTop="@dimen/settings_item_mt"
+            android:layout_marginEnd="@dimen/settings_item_me"
+            app:drawableEndCompat="@drawable/arrow_forward" />
+
+
+    </LinearLayout>
+</LinearLayout>
