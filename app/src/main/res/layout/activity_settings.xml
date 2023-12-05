@@ -64,6 +64,7 @@
 
 
         <TextView
+            android:id="@+id/share"
             style="@style/SettingsItemTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -72,6 +73,7 @@
             app:drawableEndCompat="@drawable/share" />
 
         <TextView
+            android:id="@+id/support"
             style="@style/SettingsItemTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -81,6 +83,7 @@
 
 
         <TextView
+            android:id="@+id/terms_of_use"
             style="@style/SettingsItemTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
