@@ -8,4 +8,10 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="customReference">@drawable/arrow_white</item>
     </style>
+    <style name="Theme.SearchTheme" parent="Base.Theme.PlaylistMaker">
+        <item name="android:background">@color/YP_black</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="customReference">@drawable/arrow_white</item>
+        <item name="colorPrimaryContainer">@color/white</item>
+    </style>
 </resources>
