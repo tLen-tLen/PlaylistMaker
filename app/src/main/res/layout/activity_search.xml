@@ -69,8 +69,7 @@
             android:visibility="gone"
             android:layout_gravity="end"
             android:drawableTint="@color/YP_gray"
-            android:background="@android:color/transparent"
-            android:alpha="0.5"/>
+            android:background="@android:color/transparent" />
     </FrameLayout>
 
 </LinearLayout>
