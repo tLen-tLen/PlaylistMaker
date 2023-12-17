@@ -12,7 +12,7 @@ import android.widget.ImageView
 
 class SearchActivity : AppCompatActivity() {
     companion object {
-        val SEARCH_STRING_KEY = "search_string"
+        private const val SEARCH_STRING_KEY = "search_string"
     }
 
     private var searchSavedData: String = ""
@@ -23,10 +23,6 @@ class SearchActivity : AppCompatActivity() {
 
         val searchString = findViewById<EditText>(R.id.search_string)
         val clearButton = findViewById<ImageView>(R.id.clear_search_btn)
-
-        if (savedInstanceState != null) {
-            searchString.setText(searchSavedData)
-        }
 
         setBackBtnListener()
         setClearBtnListener(searchString, clearButton)
