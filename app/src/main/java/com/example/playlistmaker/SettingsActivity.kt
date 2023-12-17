@@ -44,11 +44,7 @@ class SettingsActivity : AppCompatActivity() {
 
         supportBtn.setOnClickListener {
             val email = "lastonetwo18@gmail.com"
-            val uri = Uri.parse("mailto:$email")
-                .buildUpon()
-                .appendQueryParameter("subject", getString(R.string.support_subject))
-                .appendQueryParameter("body", getString(R.string.support_message_default))
-                .build()
+            val uri = Uri.parse("mailto:$email?subject=${getString(R.string.support_subject)}&body=${getString(R.string.support_message_default)}")
 
             val intent = Intent(Intent.ACTION_SENDTO, uri)
             startActivity(Intent.createChooser(intent, getString(R.string.write_support)))
