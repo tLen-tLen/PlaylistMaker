@@ -34,13 +34,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="8dp"
-            android:layout_marginHorizontal="30dp"
-            android:src="@drawable/search_small"
-            android:layout_gravity="start"/>
+
         <EditText
             android:id="@+id/search_string"
             android:layout_width="match_parent"
@@ -54,10 +48,19 @@
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:fontFamily="@font/ys_display_regular"
-            android:alpha="0.5"
             android:maxLines="1"
             android:paddingHorizontal="35dp"
             android:paddingVertical="10dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="30dp"
+            android:src="@drawable/search_small"
+            android:layout_gravity="start"
+            android:background="@android:color/transparent"/>
+
         <ImageView
             android:id="@+id/clear_search_btn"
             android:layout_width="wrap_content"

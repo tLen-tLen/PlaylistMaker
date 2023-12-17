@@ -35,6 +35,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        val searchSavedData = findViewById<EditText>(R.id.search_string).text.toString()
         outState.putString(SEARCH_STRING_KEY, searchSavedData)
     }
 
