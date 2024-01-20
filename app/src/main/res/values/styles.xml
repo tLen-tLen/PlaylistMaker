@@ -25,4 +25,23 @@
         <item name="iconTint">@color/YP_black</item>
         <item name="iconPadding">@dimen/icon_padding</item>
     </style>
+
+
+    <style name="TrackNameStyle">
+        <item name="android:text">TextView</item>
+        <item name="android:textSize">@dimen/textSize_16</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="TrackImageStyle">
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
+    <style name="TrackIconArrow">
+        <item name="android:tint">@color/YP_gray</item>
+    </style>
+
 </resources>

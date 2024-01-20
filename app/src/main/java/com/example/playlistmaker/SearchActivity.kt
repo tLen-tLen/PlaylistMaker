@@ -9,6 +9,11 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.adapters.TrackListAdapter
+import com.example.playlistmaker.dataclasses.Track
+import com.example.playlistmaker.services.TrackService
 
 class SearchActivity : AppCompatActivity() {
     companion object {
@@ -27,6 +32,8 @@ class SearchActivity : AppCompatActivity() {
         setBackBtnListener()
         setClearBtnListener(searchString, clearButton)
         setSearchWatcher(searchString, clearButton)
+
+        initTrackList()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -78,5 +85,13 @@ class SearchActivity : AppCompatActivity() {
         backBtn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+    }
+
+    private fun initTrackList()
+    {
+        val trackListRV = findViewById<RecyclerView>(R.id.tracks)
+        trackListRV.layoutManager = LinearLayoutManager(this)
+        val trackDataList:ArrayList<Track> = TrackService().getTrackList()
+        trackListRV.adapter = TrackListAdapter(trackDataList)
     }
 }
