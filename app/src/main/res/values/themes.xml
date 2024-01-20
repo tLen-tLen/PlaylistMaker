@@ -5,5 +5,18 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
+    <style name="Theme.MainTheme" parent="Base.Theme.PlaylistMaker">
+        <item name="android:background">@color/blue_background</item>
+    </style>
+    <style name="Theme.SettingsTheme" parent="Base.Theme.PlaylistMaker">
+        <item name="android:background">@color/white</item>
+        <item name="colorOnPrimary">@color/YP_black</item>
+        <item name="customReference">@drawable/arrow_black</item>
+    </style>
+    <style name="Theme.SearchTheme" parent="Base.Theme.PlaylistMaker">
+        <item name="android:background">@color/white</item>
+        <item name="colorOnPrimary">@color/YP_black</item>
+        <item name="customReference">@drawable/arrow_black</item>
+        <item name="colorPrimaryContainer">@color/YP_gray</item>
+    </style>
 </resources>
