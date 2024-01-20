@@ -2,9 +2,9 @@ package com.example.playlistmaker.services
 
 import com.example.playlistmaker.dataclasses.Track
 
-class TrackService {
-    fun getTrackList(): ArrayList<Track> {
-        return arrayListOf(
+object TrackService {
+    fun getTrackList(): MutableList<Track> {
+        return mutableListOf(
             Track(
                 "Smells Like Teen Spirit",
                 "Nirvana",

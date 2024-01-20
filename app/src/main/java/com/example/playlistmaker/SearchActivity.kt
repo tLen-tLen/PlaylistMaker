@@ -91,7 +91,7 @@ class SearchActivity : AppCompatActivity() {
     {
         val trackListRV = findViewById<RecyclerView>(R.id.tracks)
         trackListRV.layoutManager = LinearLayoutManager(this)
-        val trackDataList:ArrayList<Track> = TrackService().getTrackList()
+        val trackDataList:MutableList<Track> = TrackService.getTrackList()
         trackListRV.adapter = TrackListAdapter(trackDataList)
     }
 }

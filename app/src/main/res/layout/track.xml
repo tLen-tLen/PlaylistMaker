@@ -13,6 +13,8 @@
         android:layout_gravity="center_vertical"
         android:paddingVertical="@dimen/padding_8"
         android:paddingStart="@dimen/padding_12"
+        android:paddingEnd="@dimen/padding_12"
+        android:layout_marginStart="@dimen/margin_12"
         style="@style/TrackImageStyle"
         android:src="@drawable/baseline_replay_circle_filled_24"/>
 
@@ -41,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="1dp">
+            android:paddingTop="4dp">
 
             <TextView
                 android:id="@+id/artist_name"
