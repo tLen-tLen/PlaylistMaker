@@ -2,7 +2,8 @@ package com.example.playlistmaker.holders
 
 import android.content.Context
 import android.util.TypedValue
-import android.view.View
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.dataclasses.Track
 
-class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class TrackViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
+    LayoutInflater.from(parent.context).inflate(R.layout.track, parent, false)
+) {
 
     private val trackName: TextView = itemView.findViewById(R.id.track_name)
     private val artistName: TextView = itemView.findViewById(R.id.artist_name)
