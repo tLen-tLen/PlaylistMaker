@@ -8,14 +8,12 @@
 
     <ImageView
         android:id="@+id/track_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:paddingVertical="@dimen/padding_8"
-        android:paddingStart="@dimen/padding_12"
-        android:paddingEnd="@dimen/padding_12"
-        android:layout_marginStart="@dimen/margin_12"
         style="@style/TrackImageStyle"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/margin_12"
+        android:scaleType="centerCrop"
         android:src="@drawable/baseline_replay_circle_filled_24"/>
 
     <LinearLayout
