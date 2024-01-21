@@ -36,12 +36,4 @@
         <item name="android:lines">1</item>
     </style>
 
-    <style name="TrackImageStyle">
-        <item name="android:backgroundTint">@color/white</item>
-    </style>
-
-    <style name="TrackIconArrow">
-        <item name="android:tint">@color/YP_gray</item>
-    </style>
-
 </resources>

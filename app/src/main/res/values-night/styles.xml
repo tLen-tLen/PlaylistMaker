@@ -7,12 +7,4 @@
         <item name="android:ellipsize">end</item>
         <item name="android:lines">1</item>
     </style>
-
-    <style name="TrackImageStyle">
-        <item name="android:backgroundTint">@color/black</item>
-    </style>
-
-    <style name="TrackIconArrow">
-        <item name="android:tint">@color/white</item>
-    </style>
 </resources>
