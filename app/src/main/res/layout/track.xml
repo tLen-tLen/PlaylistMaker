@@ -10,8 +10,8 @@
     <ImageView
         android:id="@+id/track_image"
         android:backgroundTint="@color/track_image_bg"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/track_image_size"
+        android:layout_height="@dimen/track_image_size"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/margin_12"
         android:scaleType="centerCrop"

@@ -15,4 +15,6 @@
     <dimen name="padding_8">8dp</dimen>
     <dimen name="padding_12">12dp</dimen>
     <dimen name="padding_18">18dp</dimen>
+
+    <dimen name="track_image_size">48dp</dimen>
 </resources>
