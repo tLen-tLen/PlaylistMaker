@@ -1,9 +1,8 @@
 package com.example.playlistmaker.dataclasses
 
-data class Track(
+data class ITunesTrack(
     val trackName: String,
     val artistName: String,
-    val trackTime: String,
-    val imageUrl: String
-) {
-}
+    val trackTimeMillis: Int,
+    val artworkUrl100: String
+)
