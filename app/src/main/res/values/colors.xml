@@ -6,4 +6,7 @@
     <color name="YP_black">#1A1B22</color>
     <color name="YP_gray">#E6E8EB</color>
     <color name="YP_gray_light">#E6E8EB</color>
+    <color name="track_artist_time">#AEAFB4</color>
+    <color name="arrow">#E6E8EB</color>
+    <color name="track_image_bg">#FFFFFFFF</color>
 </resources>

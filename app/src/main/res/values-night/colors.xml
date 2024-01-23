@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="track_artist_time">#FFFFFF</color>
+    <color name="arrow">#FFFFFF</color>
+    <color name="track_image_bg">#FF000000</color>
+</resources>

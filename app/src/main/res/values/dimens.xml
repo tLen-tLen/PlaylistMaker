@@ -7,4 +7,14 @@
     <dimen name="settings_item_me">16dp</dimen>
     <dimen name="settings_item_mb">24dp</dimen>
     <dimen name="settings_item_mt">24dp</dimen>
+
+
+    <dimen name="margin_12">12dp</dimen>
+    <dimen name="margin_18">18dp</dimen>
+    <dimen name="textSize_16">16sp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="padding_12">12dp</dimen>
+    <dimen name="padding_18">18dp</dimen>
+
+    <dimen name="track_image_size">45dp</dimen>
 </resources>
