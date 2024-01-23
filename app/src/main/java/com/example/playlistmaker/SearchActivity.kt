@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -33,6 +34,7 @@ class SearchActivity : AppCompatActivity() {
     private var searchSavedData: String = ""
 
     private val trackDataList:MutableList<ITunesTrack> = mutableListOf()
+    private val adapter = TrackListAdapter(trackDataList)
 
     private lateinit var trackListRV: RecyclerView
     private lateinit var updateBtn: MaterialButton
@@ -81,12 +83,13 @@ class SearchActivity : AppCompatActivity() {
         if (search.isNotEmpty()) {
             itunesService.search(search).enqueue(object : Callback<ITunesTrackResponse> {
 
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(call: Call<ITunesTrackResponse>, response: Response<ITunesTrackResponse>) {
                     if (response.code() == 200) {
                         trackDataList.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
                             trackDataList.addAll(response.body()!!.results)
-                            initTrackList()
+                            adapter.notifyDataSetChanged()
                             setTrackListStatus(TrackListStatus.SUCCESS)
                         } else {
                             setTrackListStatus(TrackListStatus.NOT_FOUND)
@@ -158,7 +161,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initTrackList() {
         trackListRV.layoutManager = LinearLayoutManager(this)
-        trackListRV.adapter = TrackListAdapter(trackDataList)
+        trackListRV.adapter = adapter
     }
 
     private fun setTrackListStatus(status: TrackListStatus) {
