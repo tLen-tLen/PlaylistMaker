@@ -54,7 +54,7 @@ class SearchActivity : AppCompatActivity() {
 
         val searchString = findViewById<EditText>(R.id.search_string)
         val clearButton = findViewById<ImageView>(R.id.clear_search_btn)
-        trackListRV = findViewById(R.id.tracks)
+        trackListRV = findViewById(R.id.rvTracks)
         updateBtn = findViewById(R.id.update_btn)
         errorImage = findViewById(R.id.error_image)
         errorTitle = findViewById(R.id.error_title)
