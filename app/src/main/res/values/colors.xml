@@ -9,4 +9,6 @@
     <color name="track_artist_time">#AEAFB4</color>
     <color name="arrow">#E6E8EB</color>
     <color name="track_image_bg">#FFFFFFFF</color>
+    <color name="update_btn_bg">#1A1B22</color>
+    <color name="update_btn_text">#FFFFFFFF</color>
 </resources>
