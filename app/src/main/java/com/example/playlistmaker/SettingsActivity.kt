@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +17,14 @@ class SettingsActivity : AppCompatActivity() {
         setShareBtnListener()
         setSupportBtnListener()
         setTermsOfUseBtnListener()
+        setThemeSwitcherListener()
+    }
+
+    private fun setThemeSwitcherListener() {
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
     }
 
     private fun setBackBtnListener() {
