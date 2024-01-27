@@ -2,19 +2,23 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.adapters.TrackListAdapter
+import com.example.playlistmaker.adapters.TrackListHistoryAdapter
 import com.example.playlistmaker.api.ITunes.ITunesApi
 import com.example.playlistmaker.dataclasses.ITunesTrack
 import com.example.playlistmaker.dataclasses.ITunesTrackResponse
@@ -34,12 +38,16 @@ class SearchActivity : AppCompatActivity() {
     private var searchSavedData: String = ""
 
     private val trackDataList:MutableList<ITunesTrack> = mutableListOf()
-    private val adapter = TrackListAdapter(trackDataList)
+    private lateinit var adapter: TrackListAdapter
 
+    private lateinit var searchString: EditText
+    private lateinit var clearButton: ImageView
     private lateinit var trackListRV: RecyclerView
     private lateinit var updateBtn: MaterialButton
     private lateinit var errorImage: ImageView
     private lateinit var errorTitle: TextView
+
+    private var historyTracks = mutableListOf<ITunesTrack>()
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://itunes.apple.com")
@@ -52,9 +60,12 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val searchString = findViewById<EditText>(R.id.search_string)
-        val clearButton = findViewById<ImageView>(R.id.clear_search_btn)
-        trackListRV = findViewById(R.id.rvTracks)
+        val prefs =  getSharedPreferences(SearchHistory.HISTORY_SP, MODE_PRIVATE)
+        adapter = TrackListAdapter(trackDataList, prefs)
+
+        searchString = findViewById(R.id.search_string)
+        clearButton = findViewById(R.id.clear_search_btn)
+        trackListRV = findViewById(R.id.rv_tracks)
         updateBtn = findViewById(R.id.update_btn)
         errorImage = findViewById(R.id.error_image)
         errorTitle = findViewById(R.id.error_title)
@@ -75,9 +86,46 @@ class SearchActivity : AppCompatActivity() {
         }
 
         initTrackList()
+        initHistoryList(prefs)
+
+
+    }
+
+    private fun initHistoryList(prefs: SharedPreferences) {
+        val historyTitleTV = findViewById<TextView>(R.id.tv_history_title)
+        val historyClearBtn = findViewById<MaterialButton>(R.id.clear_history_btn)
+
+        val history = SearchHistory(prefs)
+        historyTracks = history.read()
+
+        val historyAdapter = TrackListHistoryAdapter(historyTracks)
+
+        searchString.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && searchString.text.isEmpty()) {
+                trackListRV.adapter = historyAdapter
+                historyAdapter.notifyDataSetChanged()
+                if (historyTracks.isNotEmpty()) {
+                    historyTitleTV.visibility = View.VISIBLE
+                    historyClearBtn.visibility = View.VISIBLE
+                }
+            } else {
+                trackListRV.adapter = adapter
+                historyTitleTV.visibility = View.GONE
+                historyClearBtn.visibility = View.GONE
+            }
+        }
+
+        historyClearBtn.setOnClickListener {
+            history.clear()
+            historyAdapter.notifyDataSetChanged()
+            Toast.makeText(this, "История очищена", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun search(searchString: EditText) {
+
+        Toast.makeText(this, "Идет поиск", Toast.LENGTH_SHORT).show()
         val search = searchString.text.toString()
 
         if (search.isNotEmpty()) {
@@ -95,11 +143,13 @@ class SearchActivity : AppCompatActivity() {
                             setTrackListStatus(TrackListStatus.NOT_FOUND)
                         }
                     } else {
+                        Log.d("TEST", "fail ${response.code()} ")
                         setTrackListStatus(TrackListStatus.FAIL)
                     }
                 }
 
                 override fun onFailure(call: Call<ITunesTrackResponse>, t: Throwable) {
+                    Log.d("TEST", "fail")
                     setTrackListStatus(TrackListStatus.FAIL)
                 }
             })
@@ -189,6 +239,5 @@ class SearchActivity : AppCompatActivity() {
                 updateBtn.visibility = View.VISIBLE
             }
         }
-
     }
 }
