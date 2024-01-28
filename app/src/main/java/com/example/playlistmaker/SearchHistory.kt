@@ -16,8 +16,6 @@ class SearchHistory(val sharedPreferences: SharedPreferences) {
     }
 
     fun write(addedTrack: ITunesTrack? = null): MutableList<ITunesTrack> {
-
-        // TODO проверки проверить
         if (addedTrack != null) {
             val editor = sharedPreferences.edit()
 

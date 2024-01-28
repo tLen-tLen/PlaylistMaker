@@ -66,14 +66,7 @@ class SearchActivity : AppCompatActivity() {
         history = SearchHistory(prefs)
         adapter = TrackListAdapter(trackDataList, prefs)
 
-        searchString = findViewById(R.id.search_string)
-        clearButton = findViewById(R.id.clear_search_btn)
-        trackListRV = findViewById(R.id.rv_tracks)
-        updateBtn = findViewById(R.id.update_btn)
-        errorImage = findViewById(R.id.error_image)
-        errorTitle = findViewById(R.id.error_title)
-        historyTitleTV = findViewById(R.id.tv_history_title)
-        historyClearBtn = findViewById(R.id.clear_history_btn)
+        setViewsById()
 
         setBackBtnListener()
         setClearBtnListener(prefs)
@@ -83,6 +76,20 @@ class SearchActivity : AppCompatActivity() {
 
         initTrackList()
         initHistoryList()
+    }
+
+    /**
+     * Заполнение атрибутов элементами на экране
+     */
+    private fun setViewsById() {
+        searchString = findViewById(R.id.search_string)
+        clearButton = findViewById(R.id.clear_search_btn)
+        trackListRV = findViewById(R.id.rv_tracks)
+        updateBtn = findViewById(R.id.update_btn)
+        errorImage = findViewById(R.id.error_image)
+        errorTitle = findViewById(R.id.error_title)
+        historyTitleTV = findViewById(R.id.tv_history_title)
+        historyClearBtn = findViewById(R.id.clear_history_btn)
     }
 
     /**
