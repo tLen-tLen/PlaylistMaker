@@ -11,7 +11,6 @@ class SearchHistory(val sharedPreferences: SharedPreferences) {
     private var trackList: MutableList<ITunesTrack> = mutableListOf()
     fun read(): MutableList<ITunesTrack> {
         val json = sharedPreferences.getString(HISTORY_TRACK_LIST, null) ?: return mutableListOf()
-        Log.d("TEST", "read: $json")
         trackList = Gson().fromJson(json, Array<ITunesTrack>::class.java).toCollection(ArrayList())
 
         return trackList

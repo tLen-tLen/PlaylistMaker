@@ -102,14 +102,15 @@ class SearchActivity : AppCompatActivity() {
 
         searchString.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && searchString.text.isEmpty()) {
-                trackListRV.adapter = historyAdapter
-                historyAdapter.notifyDataSetChanged()
+                trackDataList.addAll(historyTracks)
+                Log.d("TEST", trackDataList.size.toString())
+                adapter.notifyDataSetChanged()
                 if (historyTracks.isNotEmpty()) {
                     historyTitleTV.visibility = View.VISIBLE
                     historyClearBtn.visibility = View.VISIBLE
                 }
             } else {
-                trackListRV.adapter = adapter
+                Log.d("TEST", "фокуса нет")
                 historyTitleTV.visibility = View.GONE
                 historyClearBtn.visibility = View.GONE
             }
