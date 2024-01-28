@@ -133,6 +133,7 @@ class SearchActivity : AppCompatActivity() {
                         trackDataList.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
                             trackDataList.addAll(response.body()!!.results)
+                            initTrackList()
                             adapter.notifyDataSetChanged()
                             setTrackListStatus(TrackListStatus.SUCCESS)
                         } else {
