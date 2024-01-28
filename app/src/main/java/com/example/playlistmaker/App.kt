@@ -32,7 +32,7 @@ class App : Application() {
     }
 
     companion object {
-        const val THIEME_SWITCH_KEY = "THIEME_SWITCH_KEY"
-        const val SHARED_PREFERENCE_NAME = "PLAYLISTMAKER_SHARED_PREFS"
+        private const val THIEME_SWITCH_KEY = "THIEME_SWITCH_KEY"
+        private const val SHARED_PREFERENCE_NAME = "PLAYLISTMAKER_SHARED_PREFS"
     }
 }

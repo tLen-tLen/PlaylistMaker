@@ -111,7 +111,6 @@ class SearchActivity : AppCompatActivity() {
             trackDataList.clear()
             initTrackList()
             hideHistoryViewItems()
-            Toast.makeText(this, "История очищена", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -120,7 +119,6 @@ class SearchActivity : AppCompatActivity() {
      */
     private fun search(searchString: EditText) {
 
-        Toast.makeText(this, "Идет поиск", Toast.LENGTH_SHORT).show()
         hideHistoryViewItems()
 
         val search = searchString.text.toString()
@@ -263,13 +261,11 @@ class SearchActivity : AppCompatActivity() {
                 updateBtn.visibility = View.GONE
             }
             TrackListStatus.NOT_FOUND -> {
-                Log.d("TEST", "парампампам")
                 trackListRV.visibility = View.GONE
                 errorImage.setImageResource(R.drawable.not_found)
                 errorTitle.setText(R.string.not_found)
                 errorImage.visibility = View.VISIBLE
                 errorTitle.visibility = View.VISIBLE
-                Log.d("TEST", "парампампам 2")
             }
             else -> {
                 trackListRV.visibility = View.GONE

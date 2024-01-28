@@ -18,7 +18,7 @@ class TrackListAdapter(
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val item = trackList[position]
 
-        holder.itemView.setOnClickListener { writeToHistory(item, holder) }
+        holder.itemView.setOnClickListener { writeToHistory(item) }
 
         holder.bind(item)
     }
@@ -27,9 +27,7 @@ class TrackListAdapter(
         return trackList.size
     }
 
-    private fun writeToHistory(track: ITunesTrack, holder: TrackViewHolder) {
-        Toast.makeText(holder.itemView.context, "Добавляю в историю", Toast.LENGTH_SHORT).show()
-
+    private fun writeToHistory(track: ITunesTrack) {
         val history = SearchHistory(pref)
         history.write(track)
     }
