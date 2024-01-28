@@ -18,7 +18,6 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.adapters.TrackListAdapter
-import com.example.playlistmaker.adapters.TrackListHistoryAdapter
 import com.example.playlistmaker.api.ITunes.ITunesApi
 import com.example.playlistmaker.dataclasses.ITunesTrack
 import com.example.playlistmaker.dataclasses.ITunesTrackResponse
@@ -46,7 +45,10 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var updateBtn: MaterialButton
     private lateinit var errorImage: ImageView
     private lateinit var errorTitle: TextView
+    private lateinit var historyTitleTV: TextView
+    private lateinit var historyClearBtn: MaterialButton
 
+    private lateinit var history: SearchHistory
     private var historyTracks = mutableListOf<ITunesTrack>()
 
     private val retrofit = Retrofit.Builder()
@@ -61,6 +63,7 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
 
         val prefs =  getSharedPreferences(SearchHistory.HISTORY_SP, MODE_PRIVATE)
+        history = SearchHistory(prefs)
         adapter = TrackListAdapter(trackDataList, prefs)
 
         searchString = findViewById(R.id.search_string)
@@ -69,66 +72,51 @@ class SearchActivity : AppCompatActivity() {
         updateBtn = findViewById(R.id.update_btn)
         errorImage = findViewById(R.id.error_image)
         errorTitle = findViewById(R.id.error_title)
+        historyTitleTV = findViewById(R.id.tv_history_title)
+        historyClearBtn = findViewById(R.id.clear_history_btn)
 
         setBackBtnListener()
-        setClearBtnListener(searchString, clearButton)
-        setSearchWatcher(searchString, clearButton)
-
-        searchString.setOnEditorActionListener { v, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                search(searchString)
-                true
-            }
-            false
-        }
-        updateBtn.setOnClickListener {
-            search(searchString)
-        }
+        setClearBtnListener(prefs)
+        setSearchWatcher()
+        setSearchActionListener()
+        setUpdateBtnListener()
 
         initTrackList()
-        initHistoryList(prefs)
-
-
+        initHistoryList()
     }
 
-    private fun initHistoryList(prefs: SharedPreferences) {
-        val historyTitleTV = findViewById<TextView>(R.id.tv_history_title)
-        val historyClearBtn = findViewById<MaterialButton>(R.id.clear_history_btn)
-
-        val history = SearchHistory(prefs)
+    /**
+     * Установка слушателей на фокус строки поиска и на клик по кнопке "Очистить историю"
+     */
+    private fun initHistoryList() {
         historyTracks = history.read()
-
-        val historyAdapter = TrackListHistoryAdapter(historyTracks)
 
         searchString.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && searchString.text.isEmpty()) {
                 trackDataList.addAll(historyTracks)
-                Log.d("TEST", trackDataList.size.toString())
                 adapter.notifyDataSetChanged()
-                if (historyTracks.isNotEmpty()) {
-                    historyTitleTV.visibility = View.VISIBLE
-                    historyClearBtn.visibility = View.VISIBLE
-                }
-            } else {
-                Log.d("TEST", "фокуса нет")
-                historyTitleTV.visibility = View.GONE
-                historyClearBtn.visibility = View.GONE
+                showHistoryViewItems(historyTracks)
             }
         }
 
         historyClearBtn.setOnClickListener {
             history.clear()
-            historyAdapter.notifyDataSetChanged()
+            trackDataList.clear()
+            initTrackList()
+            hideHistoryViewItems()
             Toast.makeText(this, "История очищена", Toast.LENGTH_SHORT).show()
         }
-
     }
 
+    /**
+     * Выполнение и вывод поискового запроса
+     */
     private fun search(searchString: EditText) {
 
         Toast.makeText(this, "Идет поиск", Toast.LENGTH_SHORT).show()
-        val search = searchString.text.toString()
+        hideHistoryViewItems()
 
+        val search = searchString.text.toString()
         if (search.isNotEmpty()) {
             itunesService.search(search).enqueue(object : Callback<ITunesTrackResponse> {
 
@@ -157,6 +145,24 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Скрыть визуальные элементы истории
+     */
+    private fun hideHistoryViewItems() {
+        historyTitleTV.visibility = View.GONE
+        historyClearBtn.visibility = View.GONE
+    }
+
+    /**
+     * Показать визуальные элементы истории
+     */
+    private fun showHistoryViewItems(historyTracks: List<ITunesTrack>) {
+        if (historyTracks.isNotEmpty()) {
+            historyTitleTV.visibility = View.VISIBLE
+            historyClearBtn.visibility = View.VISIBLE
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val searchSavedData = findViewById<EditText>(R.id.search_string).text.toString()
@@ -168,18 +174,28 @@ class SearchActivity : AppCompatActivity() {
         searchSavedData = savedInstanceState.getString(SEARCH_STRING_KEY)?: ""
     }
 
-    private fun setClearBtnListener(searchString: EditText, clearButton: ImageView) {
+    /**
+     * Установка слушателя на кнопку "очистить строку поиска" (крестик)
+     */
+    private fun setClearBtnListener(prefs: SharedPreferences ) {
         clearButton.setOnClickListener {
             searchString.setText("")
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(searchString?.windowToken, 0)
             trackDataList.clear()
-            initTrackList()
+
+            historyTracks = history.read()
+            showHistoryViewItems(historyTracks)
+            val historyAdapter = TrackListAdapter(historyTracks, prefs)
+            trackListRV.adapter = historyAdapter
         }
     }
 
-    private fun setSearchWatcher(searchString: EditText, clearButton: ImageView) {
+    /**
+     * Установка наблюдателя за изменениями в строке поиска
+     */
+    private fun setSearchWatcher() {
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
@@ -194,6 +210,9 @@ class SearchActivity : AppCompatActivity() {
         searchString.addTextChangedListener(watcher)
     }
 
+    /**
+     * Получить видимость кнопки "очистить запрос"
+     */
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
@@ -202,6 +221,9 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Установка слушателя на кнопку "назад"
+     */
     private fun setBackBtnListener() {
         val backBtn = findViewById<ImageView>(R.id.back)
 
@@ -210,11 +232,17 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Инициализация списка песен
+     */
     private fun initTrackList() {
         trackListRV.layoutManager = LinearLayoutManager(this)
         trackListRV.adapter = adapter
     }
 
+    /**
+     * Установка видимости элементов на странице в зависимости от статуса ответа
+     */
     private fun setTrackListStatus(status: TrackListStatus) {
         when (status) {
             TrackListStatus.SUCCESS -> {
@@ -239,6 +267,28 @@ class SearchActivity : AppCompatActivity() {
                 errorTitle.visibility = View.VISIBLE
                 updateBtn.visibility = View.VISIBLE
             }
+        }
+    }
+
+    /**
+     * Установка слушателя изменений в строке поиска
+     */
+    private fun setSearchActionListener() {
+        searchString.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                search(searchString)
+                true
+            }
+            false
+        }
+    }
+
+    /**
+     * Установка слушателя на кнопку "обновить"
+     */
+    private fun setUpdateBtnListener() {
+        updateBtn.setOnClickListener {
+            search(searchString)
         }
     }
 }
