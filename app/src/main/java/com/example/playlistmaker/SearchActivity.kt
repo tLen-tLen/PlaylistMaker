@@ -132,13 +132,13 @@ class SearchActivity : AppCompatActivity() {
                             setTrackListStatus(TrackListStatus.NOT_FOUND)
                         }
                     } else {
-                        Log.d("TEST", "fail ${response.code()} ")
+                        Log.d("ITunes search", "fail ${response.code()} ")
                         setTrackListStatus(TrackListStatus.FAIL)
                     }
                 }
 
                 override fun onFailure(call: Call<ITunesTrackResponse>, t: Throwable) {
-                    Log.d("TEST", "fail")
+                    Log.d("ITunes search", "fail connection")
                     setTrackListStatus(TrackListStatus.FAIL)
                 }
             })
@@ -158,6 +158,7 @@ class SearchActivity : AppCompatActivity() {
      */
     private fun showHistoryViewItems(historyTracks: List<ITunesTrack>) {
         if (historyTracks.isNotEmpty()) {
+            trackListRV.visibility = View.VISIBLE
             historyTitleTV.visibility = View.VISIBLE
             historyClearBtn.visibility = View.VISIBLE
         }
