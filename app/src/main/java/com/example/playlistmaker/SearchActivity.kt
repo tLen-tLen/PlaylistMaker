@@ -186,6 +186,8 @@ class SearchActivity : AppCompatActivity() {
             inputMethodManager?.hideSoftInputFromWindow(searchString?.windowToken, 0)
             trackDataList.clear()
 
+            hideErrorViewItems()
+
             historyTracks = history.read()
             showHistoryViewItems(historyTracks)
             val historyAdapter = TrackListAdapter(historyTracks, prefs)
@@ -253,11 +255,13 @@ class SearchActivity : AppCompatActivity() {
                 updateBtn.visibility = View.GONE
             }
             TrackListStatus.NOT_FOUND -> {
+                Log.d("TEST", "парампампам")
                 trackListRV.visibility = View.GONE
                 errorImage.setImageResource(R.drawable.not_found)
                 errorTitle.setText(R.string.not_found)
                 errorImage.visibility = View.VISIBLE
                 errorTitle.visibility = View.VISIBLE
+                Log.d("TEST", "парампампам 2")
             }
             else -> {
                 trackListRV.visibility = View.GONE
@@ -291,5 +295,15 @@ class SearchActivity : AppCompatActivity() {
         updateBtn.setOnClickListener {
             search(searchString)
         }
+    }
+
+
+    /**
+     * Скрыть картинку и заголовок ошибки
+     */
+    private fun hideErrorViewItems() {
+        errorImage.visibility = View.GONE
+        errorTitle.visibility = View.GONE
+        updateBtn.visibility = View.GONE
     }
 }
