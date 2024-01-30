@@ -15,4 +15,7 @@
     <string name="not_found">Ничего не нашлось</string>
     <string name="network_error">Проблемы со связью \n \n Проверьте подключение к интернету</string>
     <string name="update">Обновить</string>
+
+    <string name="history_title">Вы искали</string>
+    <string name="history_clear">Очистить историю</string>
 </resources>

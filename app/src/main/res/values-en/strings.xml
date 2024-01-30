@@ -15,4 +15,7 @@
     <string name="not_found">Nothing found</string>
     <string name="network_error">Connection problems \n \n Check your internet connection</string>
     <string name="update">Update</string>
+
+    <string name="history_title">You were looking for</string>
+    <string name="history_clear">Clear history</string>
 </resources>

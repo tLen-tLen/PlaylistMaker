@@ -54,7 +54,8 @@
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="@dimen/settings_item_size" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/themeSwitcher"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

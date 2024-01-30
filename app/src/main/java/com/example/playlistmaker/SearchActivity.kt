@@ -2,16 +2,19 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.adapters.TrackListAdapter
@@ -34,12 +37,19 @@ class SearchActivity : AppCompatActivity() {
     private var searchSavedData: String = ""
 
     private val trackDataList:MutableList<ITunesTrack> = mutableListOf()
-    private val adapter = TrackListAdapter(trackDataList)
+    private lateinit var adapter: TrackListAdapter
 
+    private lateinit var searchString: EditText
+    private lateinit var clearButton: ImageView
     private lateinit var trackListRV: RecyclerView
     private lateinit var updateBtn: MaterialButton
     private lateinit var errorImage: ImageView
     private lateinit var errorTitle: TextView
+    private lateinit var historyTitleTV: TextView
+    private lateinit var historyClearBtn: MaterialButton
+
+    private lateinit var history: SearchHistory
+    private var historyTracks = mutableListOf<ITunesTrack>()
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://itunes.apple.com")
@@ -52,34 +62,66 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val searchString = findViewById<EditText>(R.id.search_string)
-        val clearButton = findViewById<ImageView>(R.id.clear_search_btn)
-        trackListRV = findViewById(R.id.rvTracks)
+        val prefs =  getSharedPreferences(SearchHistory.HISTORY_SP, MODE_PRIVATE)
+        history = SearchHistory(prefs)
+        adapter = TrackListAdapter(trackDataList, prefs)
+
+        setViewsById()
+
+        setBackBtnListener()
+        setClearBtnListener(prefs)
+        setSearchWatcher()
+        setSearchActionListener()
+        setUpdateBtnListener()
+
+        initTrackList()
+        initHistoryList()
+    }
+
+    /**
+     * Заполнение атрибутов элементами на экране
+     */
+    private fun setViewsById() {
+        searchString = findViewById(R.id.search_string)
+        clearButton = findViewById(R.id.clear_search_btn)
+        trackListRV = findViewById(R.id.rv_tracks)
         updateBtn = findViewById(R.id.update_btn)
         errorImage = findViewById(R.id.error_image)
         errorTitle = findViewById(R.id.error_title)
-
-        setBackBtnListener()
-        setClearBtnListener(searchString, clearButton)
-        setSearchWatcher(searchString, clearButton)
-
-        searchString.setOnEditorActionListener { v, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                search(searchString)
-                true
-            }
-            false
-        }
-        updateBtn.setOnClickListener {
-            search(searchString)
-        }
-
-        initTrackList()
+        historyTitleTV = findViewById(R.id.tv_history_title)
+        historyClearBtn = findViewById(R.id.clear_history_btn)
     }
 
-    private fun search(searchString: EditText) {
-        val search = searchString.text.toString()
+    /**
+     * Установка слушателей на фокус строки поиска и на клик по кнопке "Очистить историю"
+     */
+    private fun initHistoryList() {
+        historyTracks = history.read()
 
+        searchString.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && searchString.text.isEmpty()) {
+                trackDataList.addAll(historyTracks)
+                adapter.notifyDataSetChanged()
+                showHistoryViewItems(historyTracks)
+            }
+        }
+
+        historyClearBtn.setOnClickListener {
+            history.clear()
+            trackDataList.clear()
+            initTrackList()
+            hideHistoryViewItems()
+        }
+    }
+
+    /**
+     * Выполнение и вывод поискового запроса
+     */
+    private fun search(searchString: EditText) {
+
+        hideHistoryViewItems()
+
+        val search = searchString.text.toString()
         if (search.isNotEmpty()) {
             itunesService.search(search).enqueue(object : Callback<ITunesTrackResponse> {
 
@@ -89,20 +131,42 @@ class SearchActivity : AppCompatActivity() {
                         trackDataList.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
                             trackDataList.addAll(response.body()!!.results)
+                            initTrackList()
                             adapter.notifyDataSetChanged()
                             setTrackListStatus(TrackListStatus.SUCCESS)
                         } else {
                             setTrackListStatus(TrackListStatus.NOT_FOUND)
                         }
                     } else {
+                        Log.d("ITunes search", "fail ${response.code()} ")
                         setTrackListStatus(TrackListStatus.FAIL)
                     }
                 }
 
                 override fun onFailure(call: Call<ITunesTrackResponse>, t: Throwable) {
+                    Log.d("ITunes search", "fail connection")
                     setTrackListStatus(TrackListStatus.FAIL)
                 }
             })
+        }
+    }
+
+    /**
+     * Скрыть визуальные элементы истории
+     */
+    private fun hideHistoryViewItems() {
+        historyTitleTV.visibility = View.GONE
+        historyClearBtn.visibility = View.GONE
+    }
+
+    /**
+     * Показать визуальные элементы истории
+     */
+    private fun showHistoryViewItems(historyTracks: List<ITunesTrack>) {
+        if (historyTracks.isNotEmpty()) {
+            trackListRV.visibility = View.VISIBLE
+            historyTitleTV.visibility = View.VISIBLE
+            historyClearBtn.visibility = View.VISIBLE
         }
     }
 
@@ -117,18 +181,30 @@ class SearchActivity : AppCompatActivity() {
         searchSavedData = savedInstanceState.getString(SEARCH_STRING_KEY)?: ""
     }
 
-    private fun setClearBtnListener(searchString: EditText, clearButton: ImageView) {
+    /**
+     * Установка слушателя на кнопку "очистить строку поиска" (крестик)
+     */
+    private fun setClearBtnListener(prefs: SharedPreferences ) {
         clearButton.setOnClickListener {
             searchString.setText("")
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(searchString?.windowToken, 0)
             trackDataList.clear()
-            initTrackList()
+
+            hideErrorViewItems()
+
+            historyTracks = history.read()
+            showHistoryViewItems(historyTracks)
+            val historyAdapter = TrackListAdapter(historyTracks, prefs)
+            trackListRV.adapter = historyAdapter
         }
     }
 
-    private fun setSearchWatcher(searchString: EditText, clearButton: ImageView) {
+    /**
+     * Установка наблюдателя за изменениями в строке поиска
+     */
+    private fun setSearchWatcher() {
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
@@ -143,6 +219,9 @@ class SearchActivity : AppCompatActivity() {
         searchString.addTextChangedListener(watcher)
     }
 
+    /**
+     * Получить видимость кнопки "очистить запрос"
+     */
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
@@ -151,6 +230,9 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Установка слушателя на кнопку "назад"
+     */
     private fun setBackBtnListener() {
         val backBtn = findViewById<ImageView>(R.id.back)
 
@@ -159,11 +241,17 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Инициализация списка песен
+     */
     private fun initTrackList() {
         trackListRV.layoutManager = LinearLayoutManager(this)
         trackListRV.adapter = adapter
     }
 
+    /**
+     * Установка видимости элементов на странице в зависимости от статуса ответа
+     */
     private fun setTrackListStatus(status: TrackListStatus) {
         when (status) {
             TrackListStatus.SUCCESS -> {
@@ -189,6 +277,37 @@ class SearchActivity : AppCompatActivity() {
                 updateBtn.visibility = View.VISIBLE
             }
         }
+    }
 
+    /**
+     * Установка слушателя изменений в строке поиска
+     */
+    private fun setSearchActionListener() {
+        searchString.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                search(searchString)
+                true
+            }
+            false
+        }
+    }
+
+    /**
+     * Установка слушателя на кнопку "обновить"
+     */
+    private fun setUpdateBtnListener() {
+        updateBtn.setOnClickListener {
+            search(searchString)
+        }
+    }
+
+
+    /**
+     * Скрыть картинку и заголовок ошибки
+     */
+    private fun hideErrorViewItems() {
+        errorImage.visibility = View.GONE
+        errorTitle.visibility = View.GONE
+        updateBtn.visibility = View.GONE
     }
 }
