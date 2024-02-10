@@ -161,15 +161,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/duration_title_tv" />
 
-        <androidx.constraintlayout.widget.Barrier
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_tags="album_title_tag"
-            app:barrierDirection="end" />
-
         <TextView
             android:id="@+id/album_track_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_32"
             android:paddingTop="@dimen/padding_9"
@@ -177,9 +171,11 @@
             android:text="@string/album"
             android:textSize="@dimen/textSize_12"
             android:textColor="@color/track_info_data"
+            android:gravity="end"
             app:layout_constraintBottom_toBottomOf="@+id/album_title_tv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/album_title_tv" />
+            app:layout_constraintTop_toTopOf="@+id/album_title_tv"
+            app:layout_constraintStart_toEndOf="@+id/album_title_tv"/>
 
         <TextView
             android:id="@+id/year_title_tv"
