@@ -1,7 +1,5 @@
 package com.example.playlistmaker.holders
 
-import android.content.Context
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -11,8 +9,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.dataclasses.ITunesTrack
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.example.playlistmaker.utils.DateTimeConverter
+import com.example.playlistmaker.utils.SizeConverter
 
 class TrackViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.track, parent, false)
@@ -27,20 +25,13 @@ class TrackViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     fun bind(track: ITunesTrack) {
         trackName.text = track.trackName
         artistName.text = track.artistName
-        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+        trackTime.text = DateTimeConverter.millisToMmSs(track.trackTimeMillis)
 
         Glide.with(itemView)
             .load(track.artworkUrl100)
-            .placeholder(R.drawable.baseline_replay_circle_filled_24)
+            .placeholder(R.drawable.placeholder)
             .centerCrop()
-            .transform(RoundedCorners(dpToPx(2f, itemView.context)))
+            .transform(RoundedCorners(SizeConverter.dpToPx(2f, itemView.context)))
             .into(trackImage)
-    }
-
-    private fun dpToPx(dp: Float, context: Context): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            context.resources.displayMetrics).toInt()
     }
 }
