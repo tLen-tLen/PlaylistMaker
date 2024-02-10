@@ -1,12 +1,15 @@
 package com.example.playlistmaker.adapters
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.SearchHistory
+import com.example.playlistmaker.TrackActivity
 import com.example.playlistmaker.dataclasses.ITunesTrack
 import com.example.playlistmaker.holders.TrackViewHolder
+import com.google.gson.Gson
 
 class TrackListAdapter(
     private val trackList: List<ITunesTrack>,
@@ -18,7 +21,13 @@ class TrackListAdapter(
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val item = trackList[position]
 
-        holder.itemView.setOnClickListener { writeToHistory(item) }
+        holder.itemView.setOnClickListener {
+            writeToHistory(item)
+
+            val intent = Intent(holder.itemView.context, TrackActivity::class.java)
+            intent.putExtra("track", Gson().toJson(item));
+            holder.itemView.context.startActivity(intent)
+        }
 
         holder.bind(item)
     }

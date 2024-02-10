@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
-        Log.d("TEST", binding.searchBtn.hasOnClickListeners().toString()) // тут true
     }
 
     private fun setLibraryBtnListeners() {

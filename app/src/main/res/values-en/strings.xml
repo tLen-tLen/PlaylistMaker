@@ -18,4 +18,10 @@
 
     <string name="history_title">You were looking for</string>
     <string name="history_clear">Clear history</string>
+
+    <string name="duration">Duration</string>
+    <string name="album">Album</string>
+    <string name="year">Year</string>
+    <string name="genre">Genre</string>
+    <string name="country">Country</string>
 </resources>
