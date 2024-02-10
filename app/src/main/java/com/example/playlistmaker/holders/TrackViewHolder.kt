@@ -16,7 +16,6 @@ class TrackViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.track, parent, false)
 ) {
 
-    // TODO binding
     private val trackName: TextView = itemView.findViewById(R.id.track_name)
     private val artistName: TextView = itemView.findViewById(R.id.artist_name)
     private val trackTime: TextView = itemView.findViewById(R.id.track_time)
