@@ -1,5 +1,9 @@
 package com.example.playlistmaker.dataclasses
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class ITunesTrack(
     val trackId: Long,
     val trackName: String,
@@ -10,4 +14,4 @@ data class ITunesTrack(
     val collectionName: String,
     val primaryGenreName: String,
     val releaseDate: String
-)
+): Parcelable

@@ -25,7 +25,7 @@ class TrackListAdapter(
             writeToHistory(item)
 
             val intent = Intent(holder.itemView.context, TrackActivity::class.java)
-            intent.putExtra("track", Gson().toJson(item));
+            intent.putExtra(TrackActivity.BUNDLE_KEY_TRACK, item)
             holder.itemView.context.startActivity(intent)
         }
 

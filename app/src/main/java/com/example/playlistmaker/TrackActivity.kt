@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -8,7 +9,7 @@ import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.dataclasses.ITunesTrack
 import com.example.playlistmaker.utils.DateTimeConverter
 import com.example.playlistmaker.utils.SizeConverter
-import com.google.gson.Gson
+
 import java.time.ZonedDateTime
 
 
@@ -21,10 +22,15 @@ class TrackActivity : AppCompatActivity() {
         binding = ActivityTrackBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val trackJson = intent.getStringExtra("track")
-        val track = Gson().fromJson(trackJson, ITunesTrack::class.java)
+        val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(BUNDLE_KEY_TRACK, ITunesTrack::class.java)
+        } else {
+            intent.getParcelableExtra(BUNDLE_KEY_TRACK)
+        }
 
-        setTrackData(track)
+        track?.let {
+            setTrackData(track)
+        }
         setBackBtnListener()
     }
 
@@ -40,7 +46,7 @@ class TrackActivity : AppCompatActivity() {
         binding.genreTrackTv.text = track.primaryGenreName
         binding.yearTrackTv.text = ZonedDateTime.parse(track.releaseDate).year.toString()
         Glide.with(binding.trackImageIv)
-            .load(track.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg"))
+            .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.placeholder)
             .centerCrop()
             .transform(RoundedCorners(SizeConverter.dpToPx(2f, binding.trackImageIv.context)))
@@ -54,5 +60,9 @@ class TrackActivity : AppCompatActivity() {
         binding.backBtn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+    }
+
+    companion object {
+        const val BUNDLE_KEY_TRACK: String = "track"
     }
 }
