@@ -38,19 +38,21 @@ class TrackActivity : AppCompatActivity() {
      * Отобразить данные трека
      */
     private fun setTrackData(track: ITunesTrack) {
-        binding.trackTitleTv.text = track.trackName
-        binding.trackArtistTv.text = track.artistName
-        binding.durationTrackTv.text = DateTimeConverter.millisToMmSs(track.trackTimeMillis)
-        binding.countryTrackTv.text = track.country
-        binding.albumTrackTv.text = track.collectionName
-        binding.genreTrackTv.text = track.primaryGenreName
-        binding.yearTrackTv.text = ZonedDateTime.parse(track.releaseDate).year.toString()
-        Glide.with(binding.trackImageIv)
-            .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
-            .placeholder(R.drawable.placeholder)
-            .centerCrop()
-            .transform(RoundedCorners(SizeConverter.dpToPx(2f, binding.trackImageIv.context)))
-            .into(binding.trackImageIv)
+        with(binding) {
+            trackTitleTv.text = track.trackName
+            trackArtistTv.text = track.artistName
+            durationTrackTv.text = DateTimeConverter.millisToMmSs(track.trackTimeMillis)
+            countryTrackTv.text = track.country
+            albumTrackTv.text = track.collectionName
+            genreTrackTv.text = track.primaryGenreName
+            yearTrackTv.text = ZonedDateTime.parse(track.releaseDate).year.toString()
+            Glide.with(trackImageIv)
+                .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
+                .placeholder(R.drawable.placeholder)
+                .centerCrop()
+                .transform(RoundedCorners(SizeConverter.dpToPx(2f, trackImageIv.context)))
+                .into(trackImageIv)
+        }
     }
 
     /**
