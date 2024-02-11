@@ -36,4 +36,18 @@
         <item name="android:lines">1</item>
     </style>
 
+    <style name="TrackDataStyle">
+        <item name="android:textSize">@dimen/textSize_12</item>
+        <item name="android:paddingTop">@dimen/padding_9</item>
+        <item name="android:paddingBottom">@dimen/padding_8</item>
+    </style>
+    <style name="TrackDataTitleStyle" parent="TrackDataStyle">
+        <item name="android:textColor">@color/track_info</item>
+        <item name="android:layout_marginStart">@dimen/margin_16</item>
+    </style>
+    <style name="TrackDataValueStyle" parent="TrackDataStyle">
+        <item name="android:textColor">@color/track_info_data</item>
+        <item name="android:layout_marginEnd">@dimen/margin_32</item>
+    </style>
+
 </resources>
