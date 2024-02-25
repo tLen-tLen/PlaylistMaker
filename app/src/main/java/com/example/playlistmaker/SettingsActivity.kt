@@ -3,15 +3,17 @@ package com.example.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.switchmaterial.SwitchMaterial
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySettingsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setBackBtnListener()
         setShareBtnListener()
@@ -21,25 +23,21 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setThemeSwitcherListener() {
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+        binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
         }
     }
 
     private fun setBackBtnListener() {
-        val backBtn = findViewById<ImageView>(R.id.back)
-
-        backBtn.setOnClickListener {
+        binding.back.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }
 
     private fun setShareBtnListener() {
         val message = "https://practicum.yandex.ru/android-developer/"
-        val shareBtn = findViewById<TextView>(R.id.share)
 
-        shareBtn.setOnClickListener {
+        binding.share.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             intent.putExtra(Intent.EXTRA_TEXT, message)
             intent.type = "text/plain"
@@ -49,9 +47,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setSupportBtnListener() {
-        val supportBtn = findViewById<TextView>(R.id.support)
-
-        supportBtn.setOnClickListener {
+        binding.support.setOnClickListener {
             val email = "lastonetwo18@gmail.com"
             val uri = Uri.parse("mailto:$email?subject=${getString(R.string.support_subject)}&body=${getString(R.string.support_message_default)}")
 
@@ -61,9 +57,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setTermsOfUseBtnListener() {
-        val termsOfUseBtn = findViewById<TextView>(R.id.terms_of_use)
-
-        termsOfUseBtn.setOnClickListener {
+        binding.termsOfUse.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://yandex.ru/legal/practicum_offer/"))
             startActivity(intent)
         }

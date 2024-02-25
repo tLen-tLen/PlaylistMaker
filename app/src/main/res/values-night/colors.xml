@@ -5,4 +5,6 @@
     <color name="track_image_bg">#FF000000</color>
     <color name="update_btn_bg">#FFFFFF</color>
     <color name="update_btn_text">#1A1B22</color>
+
+    <color name="track_info_data">#FFFFFF</color>
 </resources>
