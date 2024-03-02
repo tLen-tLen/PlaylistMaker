@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -28,6 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_STRING_KEY = "search_string"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     private lateinit var binding: ActivitySearchBinding
@@ -46,6 +49,8 @@ class SearchActivity : AppCompatActivity() {
         .build()
 
     private val itunesService = retrofit.create(ITunesApi::class.java)
+
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -185,6 +190,7 @@ class SearchActivity : AppCompatActivity() {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.clearSearchBtn.visibility = clearButtonVisibility(s)
+                searchDebounce()
             }
             override fun afterTextChanged(s: Editable?) {
                 // empty
@@ -281,5 +287,22 @@ class SearchActivity : AppCompatActivity() {
         binding.errorImage.visibility = View.GONE
         binding.errorTitle.visibility = View.GONE
         binding.updateBtn.visibility = View.GONE
+    }
+
+    /**
+     * Метод, выполняющийся при вводе текста
+     */
+    private val searchRunnable = Runnable {
+        if (binding.searchString.text.isNotEmpty()) {
+            search(binding.searchString)
+        }
+    }
+
+    /**
+     * Добавить в очередь вызов метода, выполняющегося при вводе текста
+     */
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 }
