@@ -99,6 +99,8 @@ class SearchActivity : AppCompatActivity() {
     private fun search(searchString: EditText) {
 
         hideHistoryViewItems()
+        binding.rvTracks.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
 
         val search = searchString.text.toString()
         if (search.isNotEmpty()) {
@@ -106,6 +108,7 @@ class SearchActivity : AppCompatActivity() {
 
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(call: Call<ITunesTrackResponse>, response: Response<ITunesTrackResponse>) {
+                    binding.progressBar.visibility = View.GONE
                     if (response.code() == 200) {
                         trackDataList.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
@@ -123,6 +126,7 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<ITunesTrackResponse>, t: Throwable) {
+                    binding.progressBar.visibility = View.GONE
                     Log.d("ITunes search", "fail connection")
                     setTrackListStatus(TrackListStatus.FAIL)
                 }
