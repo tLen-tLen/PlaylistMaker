@@ -100,6 +100,7 @@ class SearchActivity : AppCompatActivity() {
 
         hideHistoryViewItems()
         binding.rvTracks.visibility = View.GONE
+        hideErrorViewItems()
         binding.progressBar.visibility = View.VISIBLE
 
         val search = searchString.text.toString()
