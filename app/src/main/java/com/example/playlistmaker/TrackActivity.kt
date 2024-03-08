@@ -157,8 +157,7 @@ class TrackActivity : AppCompatActivity() {
         return object : Runnable {
             override fun run() {
                 if (playerState == STATE_PLAYING) {
-                    binding.currentTimeTv.text = SimpleDateFormat("mm:ss", Locale.getDefault())
-                        .format(mediaPlayer.currentPosition)
+                    binding.currentTimeTv.text = DateTimeConverter.millisToMmSs(mediaPlayer.currentPosition)
                     handler.postDelayed(this, PLAY_TIME_DELAY)
                 }
             }
