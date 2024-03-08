@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -15,11 +16,22 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setCurrentTheme()
         setBackBtnListener()
         setShareBtnListener()
         setSupportBtnListener()
         setTermsOfUseBtnListener()
         setThemeSwitcherListener()
+    }
+
+    private fun setCurrentTheme() {
+        when (this.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                binding.themeSwitcher.isChecked = true
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {}
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> {}
+        }
     }
 
     private fun setThemeSwitcherListener() {
