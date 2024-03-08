@@ -3,6 +3,7 @@ package com.example.playlistmaker
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -22,8 +23,6 @@ class TrackActivity : AppCompatActivity() {
 
     private var playerState = STATE_DEFAULT
 
-    var url = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/ac/c7/d1/acc7d13f-6634-495f-caf6-491eccb505e8/mzaf_4002676889906514534.plus.aac.p.m4a"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTrackBinding.inflate(layoutInflater)
@@ -37,13 +36,11 @@ class TrackActivity : AppCompatActivity() {
 
         track?.let {
             setTrackData(track)
+            preparePlayer(track)
         }
-        setBackBtnListener()
 
-        preparePlayer()
-        binding.playBtn.setOnClickListener {
-            playbackControl()
-        }
+        setBackBtnListener()
+        setPlayBtnListener()
     }
 
     override fun onPause() {
@@ -89,14 +86,18 @@ class TrackActivity : AppCompatActivity() {
     /**
      * Подготовка медиа плеера
      */
-    private fun preparePlayer() {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
-            playerState = STATE_PREPARED
+    private fun preparePlayer(track: ITunesTrack) {
+        if (track.previewUrl !== null) {
+            mediaPlayer.setDataSource(track.previewUrl)
+            mediaPlayer.prepareAsync()
+            mediaPlayer.setOnPreparedListener {
+                playerState = STATE_PREPARED
+            }
+            mediaPlayer.setOnCompletionListener {
+                playerState = STATE_PREPARED
+            }
+        } else {
+            Toast.makeText(applicationContext, "Превью отсутствует", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -131,6 +132,16 @@ class TrackActivity : AppCompatActivity() {
             }
         }
     }
+
+    /**
+     * Слушатель кнопки "играть"/"пауза"
+     */
+    private fun setPlayBtnListener() {
+        binding.playBtn.setOnClickListener {
+            playbackControl()
+        }
+    }
+
 
     companion object {
         const val BUNDLE_KEY_TRACK: String = "track"
