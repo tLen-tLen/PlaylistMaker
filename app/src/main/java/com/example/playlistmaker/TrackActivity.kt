@@ -106,7 +106,7 @@ class TrackActivity : AppCompatActivity() {
                 binding.currentTimeTv.text = DEFAULT_PLAY_TIME
             }
         } else {
-            Toast.makeText(applicationContext, "Превью отсутствует", Toast.LENGTH_SHORT).show()
+            binding.playBtn.isEnabled = false
         }
     }
 
