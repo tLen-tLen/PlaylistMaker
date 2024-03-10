@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -23,7 +24,7 @@ class TrackActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTrackBinding
 
-    private var mediaPlayer = MediaPlayer()
+    private val mediaPlayer = MediaPlayer()
 
     private var playerState = STATE_DEFAULT
 
@@ -57,7 +58,7 @@ class TrackActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
-        handler.removeCallbacks(playTimeRunnable())
+        handler.removeCallbacks(playTimeRunnable)
     }
 
     /**
@@ -102,7 +103,7 @@ class TrackActivity : AppCompatActivity() {
             }
             mediaPlayer.setOnCompletionListener {
                 playerState = STATE_PREPARED
-                handler.removeCallbacks(playTimeRunnable())
+                handler.removeCallbacks(playTimeRunnable)
                 binding.currentTimeTv.text = DEFAULT_PLAY_TIME
             }
         } else {
@@ -117,7 +118,7 @@ class TrackActivity : AppCompatActivity() {
         mediaPlayer.start()
         binding.playBtn.setBackgroundResource(R.drawable.pause_btn)
         playerState = STATE_PLAYING
-        handler.post(playTimeRunnable())
+        handler.post(playTimeRunnable)
     }
 
     /**
@@ -127,7 +128,7 @@ class TrackActivity : AppCompatActivity() {
         mediaPlayer.pause()
         binding.playBtn.setBackgroundResource(R.drawable.play_btn)
         playerState = STATE_PAUSED
-        handler.removeCallbacks(playTimeRunnable())
+        handler.removeCallbacks(playTimeRunnable)
     }
 
     /**
@@ -153,13 +154,12 @@ class TrackActivity : AppCompatActivity() {
         }
     }
 
-    private fun playTimeRunnable(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                if (playerState == STATE_PLAYING) {
-                    binding.currentTimeTv.text = DateTimeConverter.millisToMmSs(mediaPlayer.currentPosition)
-                    handler.postDelayed(this, PLAY_TIME_DELAY)
-                }
+    private val playTimeRunnable = object : Runnable {
+        override fun run() {
+            if (playerState == STATE_PLAYING) {
+                binding.currentTimeTv.text =
+                    DateTimeConverter.millisToMmSs(mediaPlayer.currentPosition)
+                handler.postDelayed(this, PLAY_TIME_DELAY)
             }
         }
     }
