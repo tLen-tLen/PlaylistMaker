@@ -71,6 +71,11 @@ class SearchActivity : AppCompatActivity() {
         initHistoryList()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+    }
+
     /**
      * Установка слушателей на фокус строки поиска и на клик по кнопке "Очистить историю"
      */
