@@ -1,10 +1,14 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import com.example.playlistmaker.data.TracksRepositoryImpl
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.data.repository.TrackInfoRepositoryImpl
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.api.TracksRepository
 import com.example.playlistmaker.domain.impl.TracksInteractorImpl
+import com.example.playlistmaker.domain.usecases.GetTrackUseCase
+import com.example.vehicle_shop_clean.domain.repository.TrackInfoRepository
 
 object Creator {
     private fun getTracksRepository(): TracksRepository {
@@ -13,5 +17,13 @@ object Creator {
 
     fun provideTracksInteractor(): TracksInteractor {
         return TracksInteractorImpl(getTracksRepository())
+    }
+
+    fun provideGetTrackUseCase(intent: Intent): GetTrackUseCase {
+        return GetTrackUseCase(getTrackInfoRepository(intent))
+    }
+
+    private fun getTrackInfoRepository(intent: Intent): TrackInfoRepository {
+        return TrackInfoRepositoryImpl(intent)
     }
 }
