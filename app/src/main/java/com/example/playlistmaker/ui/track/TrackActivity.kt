@@ -1,23 +1,20 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.track
 
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
-import com.example.playlistmaker.dataclasses.ITunesTrack
+import com.example.playlistmaker.domain.models.ITunesTrack
 import com.example.playlistmaker.utils.DateTimeConverter
 import com.example.playlistmaker.utils.SizeConverter
-import java.text.SimpleDateFormat
 
 import java.time.ZonedDateTime
-import java.util.Locale
 
 
 class TrackActivity : AppCompatActivity() {
