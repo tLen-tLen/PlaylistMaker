@@ -1,4 +1,4 @@
-package com.example.playlistmaker.holders
+package com.example.playlistmaker.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.dataclasses.ITunesTrack
+import com.example.playlistmaker.domain.models.ITunesTrack
 import com.example.playlistmaker.utils.DateTimeConverter
 import com.example.playlistmaker.utils.SizeConverter
 

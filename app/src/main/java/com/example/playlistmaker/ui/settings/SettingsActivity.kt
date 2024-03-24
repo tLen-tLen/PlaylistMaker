@@ -1,10 +1,12 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.settings
 
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.ui.App
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
@@ -61,7 +63,9 @@ class SettingsActivity : AppCompatActivity() {
     private fun setSupportBtnListener() {
         binding.support.setOnClickListener {
             val email = "lastonetwo18@gmail.com"
-            val uri = Uri.parse("mailto:$email?subject=${getString(R.string.support_subject)}&body=${getString(R.string.support_message_default)}")
+            val uri = Uri.parse("mailto:$email?subject=${getString(R.string.support_subject)}&body=${getString(
+                R.string.support_message_default
+            )}")
 
             val intent = Intent(Intent.ACTION_SENDTO, uri)
             startActivity(Intent.createChooser(intent, getString(R.string.write_support)))
