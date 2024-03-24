@@ -93,7 +93,7 @@ class TrackActivity : AppCompatActivity() {
         }
     }
 
-    fun preparePlayer(track: ITunesTrack) {
+    private fun preparePlayer(track: ITunesTrack) {
         if (track.previewUrl !== null) {
             playerInteractor.preparePlayer(track)
             playerInteractor.setOnCompletionListener {
@@ -113,7 +113,7 @@ class TrackActivity : AppCompatActivity() {
         }
     }
 
-    val playTimeRunnable = object : Runnable {
+    private val playTimeRunnable = object : Runnable {
         override fun run() {
             if (playerInteractor.getPlayerStatus() == PlayerStatus.STATE_PLAYING) {
                 binding.currentTimeTv.text =
