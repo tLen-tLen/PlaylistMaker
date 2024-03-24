@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="blue_background">#3772E7</color>
+    <color name="blue_main">#3772E7</color>
     <color name="YP_black">#1A1B22</color>
     <color name="YP_gray">#E6E8EB</color>
     <color name="YP_gray_light">#E6E8EB</color>
@@ -11,6 +11,7 @@
     <color name="track_image_bg">#FFFFFFFF</color>
     <color name="update_btn_bg">#1A1B22</color>
     <color name="update_btn_text">#FFFFFFFF</color>
+    <color name="search_placeholder">#AEAFB4</color>
 
     <color name="track_info">#AEAFB4</color>
     <color name="track_info_data">#1A1B22</color>

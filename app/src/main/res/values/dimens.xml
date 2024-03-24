@@ -17,6 +17,7 @@
     <dimen name="margin_26">26dp</dimen>
     <dimen name="margin_30">30dp</dimen>
     <dimen name="margin_32">32dp</dimen>
+    <dimen name="margin_140">140dp</dimen>
     <dimen name="textSize_12">12sp</dimen>
     <dimen name="textSize_14">14sp</dimen>
     <dimen name="textSize_16">16sp</dimen>
@@ -31,4 +32,6 @@
     <dimen name="btn_corner_radius">54dp</dimen>
 
     <dimen name="track_guideline">24dp</dimen>
+
+    <dimen name="progress_bar_size">44dp</dimen>
 </resources>

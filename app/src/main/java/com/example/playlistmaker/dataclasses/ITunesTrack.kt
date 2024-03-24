@@ -13,5 +13,6 @@ data class ITunesTrack(
     val country: String,
     val collectionName: String,
     val primaryGenreName: String,
-    val releaseDate: String
+    val releaseDate: String,
+    val previewUrl: String?
 ): Parcelable
