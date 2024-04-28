@@ -28,7 +28,7 @@
             android:name=".ui.library.LibraryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name=".settings.presentation.SettingsActivity"
             android:exported="false"
             android:theme="@style/Theme.SettingsTheme" />
         <activity
