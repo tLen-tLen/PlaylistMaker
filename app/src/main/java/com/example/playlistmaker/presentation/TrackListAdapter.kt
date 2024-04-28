@@ -1,17 +1,14 @@
-package com.example.playlistmaker.adapters
+package com.example.playlistmaker.presentation
 
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.SearchHistory
-import com.example.playlistmaker.TrackActivity
-import com.example.playlistmaker.dataclasses.ITunesTrack
-import com.example.playlistmaker.holders.TrackViewHolder
-import com.google.gson.Gson
+import com.example.playlistmaker.ui.search.SearchHistory
+import com.example.playlistmaker.ui.track.TrackActivity
+import com.example.playlistmaker.domain.models.ITunesTrack
 
 class TrackListAdapter(
     private val trackList: List<ITunesTrack>,

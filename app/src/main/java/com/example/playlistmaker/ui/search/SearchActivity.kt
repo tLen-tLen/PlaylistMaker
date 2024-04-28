@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -15,12 +15,13 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.playlistmaker.adapters.TrackListAdapter
-import com.example.playlistmaker.api.ITunes.ITunesApi
+import com.example.playlistmaker.R
+import com.example.playlistmaker.presentation.TrackListAdapter
+import com.example.playlistmaker.data.network.ITunesApi
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.dataclasses.ITunesTrack
-import com.example.playlistmaker.dataclasses.ITunesTrackResponse
-import com.example.playlistmaker.enums.TrackListStatus
+import com.example.playlistmaker.domain.models.ITunesTrack
+import com.example.playlistmaker.data.dto.ITunesTrackResponse
+import com.example.playlistmaker.domain.enums.TrackListStatus
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +38,7 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchSavedData: String = ""
 
-    private val trackDataList:MutableList<ITunesTrack> = mutableListOf()
+    private val trackDataList: MutableList<ITunesTrack> = mutableListOf()
     private lateinit var adapter: TrackListAdapter
 
     private lateinit var history: SearchHistory
@@ -57,7 +58,7 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val prefs =  getSharedPreferences(SearchHistory.HISTORY_SP, MODE_PRIVATE)
+        val prefs = getSharedPreferences(SearchHistory.HISTORY_SP, MODE_PRIVATE)
         history = SearchHistory(prefs)
         adapter = TrackListAdapter(trackDataList, prefs)
 
@@ -113,7 +114,10 @@ class SearchActivity : AppCompatActivity() {
             itunesService.search(search).enqueue(object : Callback<ITunesTrackResponse> {
 
                 @SuppressLint("NotifyDataSetChanged")
-                override fun onResponse(call: Call<ITunesTrackResponse>, response: Response<ITunesTrackResponse>) {
+                override fun onResponse(
+                    call: Call<ITunesTrackResponse>,
+                    response: Response<ITunesTrackResponse>
+                ) {
                     binding.progressBar.visibility = View.GONE
                     if (response.code() == 200) {
                         trackDataList.clear()
@@ -167,13 +171,13 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        searchSavedData = savedInstanceState.getString(SEARCH_STRING_KEY)?: ""
+        searchSavedData = savedInstanceState.getString(SEARCH_STRING_KEY) ?: ""
     }
 
     /**
      * Установка слушателя на кнопку "очистить строку поиска" (крестик)
      */
-    private fun setClearBtnListener(prefs: SharedPreferences ) {
+    private fun setClearBtnListener(prefs: SharedPreferences) {
         binding.clearSearchBtn.setOnClickListener {
             binding.searchString.setText("")
             val inputMethodManager =
@@ -198,10 +202,12 @@ class SearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.clearSearchBtn.visibility = clearButtonVisibility(s)
                 searchDebounce()
             }
+
             override fun afterTextChanged(s: Editable?) {
                 // empty
             }
@@ -248,6 +254,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.errorTitle.visibility = View.GONE
                 binding.updateBtn.visibility = View.GONE
             }
+
             TrackListStatus.NOT_FOUND -> {
                 binding.rvTracks.visibility = View.GONE
                 binding.errorImage.setImageResource(R.drawable.not_found)
@@ -255,6 +262,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.errorImage.visibility = View.VISIBLE
                 binding.errorTitle.visibility = View.VISIBLE
             }
+
             else -> {
                 binding.rvTracks.visibility = View.GONE
                 binding.errorImage.setImageResource(R.drawable.network_error)

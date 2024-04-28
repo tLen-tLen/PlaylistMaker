@@ -1,4 +1,4 @@
-package com.example.playlistmaker.enums
+package com.example.playlistmaker.domain.enums
 
 enum class TrackListStatus {
     SUCCESS,
