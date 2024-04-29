@@ -1,40 +1,31 @@
-package com.example.playlistmaker.ui.search
+package com.example.playlistmaker.search.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
-import com.example.playlistmaker.presentation.TrackListAdapter
-import com.example.playlistmaker.data.network.ITunesApi
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.models.ITunesTrack
-import com.example.playlistmaker.data.dto.ITunesTrackResponse
 import com.example.playlistmaker.domain.enums.TrackListStatus
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.playlistmaker.search.data.SearchHistory
 
 class SearchActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_STRING_KEY = "search_string"
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     private lateinit var binding: ActivitySearchBinding
+    private lateinit var viewModel: SearchViewModel
 
     private var searchSavedData: String = ""
 
@@ -44,19 +35,16 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var history: SearchHistory
     private var historyTracks = mutableListOf<ITunesTrack>()
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://itunes.apple.com")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val itunesService = retrofit.create(ITunesApi::class.java)
-
-    private val handler = Handler(Looper.getMainLooper())
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel =
+            ViewModelProvider(this, SearchViewModel.getModelFactory())[SearchViewModel::class.java]
+        viewModel.observeState().observe(this) {
+            render(it)
+        }
 
         val prefs = getSharedPreferences(SearchHistory.HISTORY_SP, MODE_PRIVATE)
         history = SearchHistory(prefs)
@@ -74,7 +62,67 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(searchRunnable)
+        viewModel.removeCallbacks()
+    }
+
+    private fun render(state: SearchScreenState) {
+        when (state) {
+            is SearchScreenState.Loading -> showProgressBar()
+            is SearchScreenState.SearchContent -> showContent(state.tracks)
+            is SearchScreenState.HistoryContent -> showHistoryContent(state.tracks)
+            is SearchScreenState.EmptySearch -> showEmptySearch()
+            is SearchScreenState.Error -> showSearchError()
+            is SearchScreenState.EmptyScreen -> showEmptyScreen()
+        }
+    }
+
+    private fun showEmptyScreen() {
+        binding.searchContainer.visibility = View.GONE
+    }
+
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.rvTracks.visibility = View.GONE
+        hideHistoryViewItems()
+        hideErrorViewItems()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showContent(tracks: List<ITunesTrack>) {
+        binding.clearHistoryBtn.visibility = View.GONE
+        setTrackListStatus(TrackListStatus.SUCCESS)
+        adapter.trackList.clear()
+        adapter.trackList.addAll(tracks)
+        initTrackList()
+        adapter.notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showHistoryContent(tracks: List<ITunesTrack>) {
+        binding.clearHistoryBtn.visibility = View.VISIBLE
+        setTrackListStatus(TrackListStatus.SUCCESS)
+        adapter.trackList.clear()
+        adapter.trackList.addAll(tracks)
+        initHistoryList()
+        adapter.notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showEmptySearch() {
+        binding.clearHistoryBtn.visibility = View.GONE
+        setTrackListStatus(TrackListStatus.NOT_FOUND)
+        adapter.trackList.clear()
+        initTrackList()
+        adapter.notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showSearchError() {
+        binding.clearHistoryBtn.visibility = View.GONE
+        setTrackListStatus(TrackListStatus.FAIL)
+        adapter.trackList.clear()
+        initTrackList()
+        adapter.notifyDataSetChanged()
     }
 
     /**
@@ -96,51 +144,6 @@ class SearchActivity : AppCompatActivity() {
             trackDataList.clear()
             initTrackList()
             hideHistoryViewItems()
-        }
-    }
-
-    /**
-     * Выполнение и вывод поискового запроса
-     */
-    private fun search(searchString: EditText) {
-
-        hideHistoryViewItems()
-        binding.rvTracks.visibility = View.GONE
-        hideErrorViewItems()
-        binding.progressBar.visibility = View.VISIBLE
-
-        val search = searchString.text.toString()
-        if (search.isNotEmpty()) {
-            itunesService.search(search).enqueue(object : Callback<ITunesTrackResponse> {
-
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onResponse(
-                    call: Call<ITunesTrackResponse>,
-                    response: Response<ITunesTrackResponse>
-                ) {
-                    binding.progressBar.visibility = View.GONE
-                    if (response.code() == 200) {
-                        trackDataList.clear()
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            trackDataList.addAll(response.body()!!.results)
-                            initTrackList()
-                            adapter.notifyDataSetChanged()
-                            setTrackListStatus(TrackListStatus.SUCCESS)
-                        } else {
-                            setTrackListStatus(TrackListStatus.NOT_FOUND)
-                        }
-                    } else {
-                        Log.d("ITunes search", "fail ${response.code()} ")
-                        setTrackListStatus(TrackListStatus.FAIL)
-                    }
-                }
-
-                override fun onFailure(call: Call<ITunesTrackResponse>, t: Throwable) {
-                    binding.progressBar.visibility = View.GONE
-                    Log.d("ITunes search", "fail connection")
-                    setTrackListStatus(TrackListStatus.FAIL)
-                }
-            })
         }
     }
 
@@ -205,7 +208,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.clearSearchBtn.visibility = clearButtonVisibility(s)
-                searchDebounce()
+                viewModel.searchDebounce(s.toString())
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -247,8 +250,10 @@ class SearchActivity : AppCompatActivity() {
      * Установка видимости элементов на странице в зависимости от статуса ответа
      */
     private fun setTrackListStatus(status: TrackListStatus) {
+        binding.progressBar.visibility = View.GONE
         when (status) {
             TrackListStatus.SUCCESS -> {
+                binding.searchContainer.visibility = View.VISIBLE
                 binding.rvTracks.visibility = View.VISIBLE
                 binding.errorImage.visibility = View.GONE
                 binding.errorTitle.visibility = View.GONE
@@ -256,6 +261,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             TrackListStatus.NOT_FOUND -> {
+                binding.searchContainer.visibility = View.VISIBLE
                 binding.rvTracks.visibility = View.GONE
                 binding.errorImage.setImageResource(R.drawable.not_found)
                 binding.errorTitle.setText(R.string.not_found)
@@ -264,6 +270,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             else -> {
+                binding.searchContainer.visibility = View.VISIBLE
                 binding.rvTracks.visibility = View.GONE
                 binding.errorImage.setImageResource(R.drawable.network_error)
                 binding.errorTitle.setText(R.string.network_error)
@@ -281,7 +288,7 @@ class SearchActivity : AppCompatActivity() {
     private fun setSearchActionListener() {
         binding.searchString.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                search(binding.searchString)
+                viewModel.search(binding.searchString.toString())
                 true
             }
             false
@@ -293,7 +300,7 @@ class SearchActivity : AppCompatActivity() {
      */
     private fun setUpdateBtnListener() {
         binding.updateBtn.setOnClickListener {
-            search(binding.searchString)
+            viewModel.search(binding.searchString.toString())
         }
     }
 
@@ -305,22 +312,5 @@ class SearchActivity : AppCompatActivity() {
         binding.errorImage.visibility = View.GONE
         binding.errorTitle.visibility = View.GONE
         binding.updateBtn.visibility = View.GONE
-    }
-
-    /**
-     * Метод, выполняющийся при вводе текста
-     */
-    private val searchRunnable = Runnable {
-        if (binding.searchString.text.isNotEmpty()) {
-            search(binding.searchString)
-        }
-    }
-
-    /**
-     * Добавить в очередь вызов метода, выполняющегося при вводе текста
-     */
-    private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 }

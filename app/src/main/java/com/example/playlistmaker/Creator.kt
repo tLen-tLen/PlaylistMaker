@@ -2,17 +2,18 @@ package com.example.playlistmaker
 
 import android.content.Context
 import android.content.Intent
-import com.example.playlistmaker.data.TracksRepositoryImpl
+import com.example.playlistmaker.search.data.TracksRepositoryImpl
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.repository.PlayerRepositoryImpl
 import com.example.playlistmaker.data.repository.TrackInfoRepositoryImpl
 import com.example.playlistmaker.domain.api.PlayerInteractor
-import com.example.playlistmaker.domain.api.TracksInteractor
-import com.example.playlistmaker.domain.api.TracksRepository
+import com.example.playlistmaker.search.domain.api.TracksInteractor
+import com.example.playlistmaker.search.domain.api.TracksRepository
 import com.example.playlistmaker.domain.impl.PlayerInteractorImpl
 import com.example.playlistmaker.domain.impl.TracksInteractorImpl
 import com.example.playlistmaker.domain.repository.PlayerRepository
 import com.example.playlistmaker.domain.usecases.GetTrackUseCase
+import com.example.playlistmaker.search.data.SearchHistory
 import com.example.playlistmaker.settings.data.impl.ExternalNavigatorImpl
 import com.example.playlistmaker.settings.data.impl.SettingsInteractorImpl
 import com.example.playlistmaker.settings.data.impl.SettingsRepositoryImpl
@@ -26,12 +27,15 @@ import com.example.vehicle_shop_clean.domain.repository.TrackInfoRepository
 object Creator {
     private const val SHARED_PREFERENCE = "SHARED_PREFERENCE"
 
-    private fun getTracksRepository(): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient())
+    private fun getTracksRepository(context: Context): TracksRepository {
+        return TracksRepositoryImpl(
+            RetrofitNetworkClient(),
+            SearchHistory(context.getSharedPreferences(SHARED_PREFERENCE, Context.MODE_PRIVATE))
+        )
     }
 
-    fun provideTracksInteractor(): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository())
+    fun provideTracksInteractor(context: Context): TracksInteractor {
+        return TracksInteractorImpl(getTracksRepository(context))
     }
 
     fun provideGetTrackUseCase(intent: Intent): GetTrackUseCase {

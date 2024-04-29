@@ -1,9 +1,9 @@
-package com.example.playlistmaker.ui.main
+package com.example.playlistmaker.main.presentation
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.playlistmaker.ui.search.SearchActivity
+import com.example.playlistmaker.search.presentation.SearchActivity
 import com.example.playlistmaker.settings.presentation.SettingsActivity
 import com.example.playlistmaker.databinding.ActivityMainBinding
 import com.example.playlistmaker.ui.library.LibraryActivity

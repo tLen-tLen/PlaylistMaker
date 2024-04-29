@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation
+package com.example.playlistmaker.search.presentation
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -6,12 +6,12 @@ import android.os.Handler
 import android.os.Looper
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.ui.search.SearchHistory
+import com.example.playlistmaker.search.data.SearchHistory
 import com.example.playlistmaker.ui.track.TrackActivity
 import com.example.playlistmaker.domain.models.ITunesTrack
 
 class TrackListAdapter(
-    private val trackList: List<ITunesTrack>,
+    val trackList: MutableList<ITunesTrack>,
     private val pref: SharedPreferences
 ) : RecyclerView.Adapter<TrackViewHolder> () {
 
@@ -34,6 +34,7 @@ class TrackListAdapter(
 
                 val intent = Intent(holder.itemView.context, TrackActivity::class.java)
                 intent.putExtra(TrackActivity.BUNDLE_KEY_TRACK, item)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 holder.itemView.context.startActivity(intent)
             }
         }
