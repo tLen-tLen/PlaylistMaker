@@ -11,7 +11,7 @@ import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.domain.enums.PlayerStatus
-import com.example.playlistmaker.domain.models.ITunesTrack
+import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.playlistmaker.utils.DateTimeConverter
 import com.example.playlistmaker.utils.SizeConverter
 

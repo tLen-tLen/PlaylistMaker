@@ -1,7 +1,7 @@
 package com.example.playlistmaker.domain.repository
 
 import com.example.playlistmaker.domain.enums.PlayerStatus
-import com.example.playlistmaker.domain.models.ITunesTrack
+import com.example.playlistmaker.search.domain.models.ITunesTrack
 
 interface PlayerRepository {
     var playerState: PlayerStatus

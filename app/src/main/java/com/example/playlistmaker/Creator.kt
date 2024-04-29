@@ -3,7 +3,7 @@ package com.example.playlistmaker
 import android.content.Context
 import android.content.Intent
 import com.example.playlistmaker.search.data.TracksRepositoryImpl
-import com.example.playlistmaker.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.repository.PlayerRepositoryImpl
 import com.example.playlistmaker.data.repository.TrackInfoRepositoryImpl
 import com.example.playlistmaker.domain.api.PlayerInteractor

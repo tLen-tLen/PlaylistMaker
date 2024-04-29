@@ -1,7 +1,7 @@
 package com.example.playlistmaker.domain.api
 
 import com.example.playlistmaker.domain.enums.PlayerStatus
-import com.example.playlistmaker.domain.models.ITunesTrack
+import com.example.playlistmaker.search.domain.models.ITunesTrack
 
 interface PlayerInteractor {
     fun preparePlayer(track: ITunesTrack)

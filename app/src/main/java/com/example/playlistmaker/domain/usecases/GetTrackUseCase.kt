@@ -1,6 +1,6 @@
 package com.example.playlistmaker.domain.usecases
 
-import com.example.playlistmaker.domain.models.ITunesTrack
+import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.vehicle_shop_clean.domain.repository.TrackInfoRepository
 
 class GetTrackUseCase(

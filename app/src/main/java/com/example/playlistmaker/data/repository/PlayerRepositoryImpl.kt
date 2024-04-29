@@ -2,7 +2,7 @@ package com.example.playlistmaker.data.repository
 
 import android.media.MediaPlayer
 import com.example.playlistmaker.domain.enums.PlayerStatus
-import com.example.playlistmaker.domain.models.ITunesTrack
+import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.playlistmaker.domain.repository.PlayerRepository
 
 

@@ -1,6 +1,6 @@
 package com.example.playlistmaker.search.presentation
 
-import com.example.playlistmaker.domain.models.ITunesTrack
+import com.example.playlistmaker.search.domain.models.ITunesTrack
 
 sealed interface SearchScreenState {
     object Loading : SearchScreenState

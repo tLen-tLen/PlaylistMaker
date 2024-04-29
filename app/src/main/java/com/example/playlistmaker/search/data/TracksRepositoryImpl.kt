@@ -1,10 +1,9 @@
 package com.example.playlistmaker.search.data
 
-import com.example.playlistmaker.data.NetworkClient
-import com.example.playlistmaker.data.dto.ITunesTrackResponse
-import com.example.playlistmaker.data.dto.ITunesTrackSearchRequest
+import com.example.playlistmaker.search.data.dto.ITunesTrackResponse
+import com.example.playlistmaker.search.data.dto.ITunesTrackSearchRequest
 import com.example.playlistmaker.search.domain.api.TracksRepository
-import com.example.playlistmaker.domain.models.ITunesTrack
+import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.playlistmaker.utils.Resource
 
 class TracksRepositoryImpl(

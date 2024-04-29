@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.search.data.SearchHistory
 import com.example.playlistmaker.ui.track.TrackActivity
-import com.example.playlistmaker.domain.models.ITunesTrack
+import com.example.playlistmaker.search.domain.models.ITunesTrack
 
 class TrackListAdapter(
     val trackList: MutableList<ITunesTrack>,

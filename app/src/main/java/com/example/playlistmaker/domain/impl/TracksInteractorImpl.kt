@@ -1,6 +1,6 @@
 package com.example.playlistmaker.domain.impl
 
-import com.example.playlistmaker.domain.models.ITunesTrack
+import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 import com.example.playlistmaker.search.domain.api.TracksRepository
 import com.example.playlistmaker.utils.Resource

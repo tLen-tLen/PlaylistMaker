@@ -2,7 +2,7 @@ package com.example.playlistmaker.data.repository
 
 import android.content.Intent
 import android.os.Build
-import com.example.playlistmaker.domain.models.ITunesTrack
+import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.playlistmaker.ui.track.TrackActivity
 import com.example.vehicle_shop_clean.domain.repository.TrackInfoRepository
 
