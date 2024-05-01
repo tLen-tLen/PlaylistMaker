@@ -1,4 +1,4 @@
-package com.example.playlistmaker.settings.data.impl
+package com.example.playlistmaker.settings.domain.impl
 
 import com.example.playlistmaker.settings.domain.api.ExternalNavigator
 import com.example.playlistmaker.settings.domain.api.SharingInteractor
