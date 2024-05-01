@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.search.domain.models.ITunesTrack
@@ -27,11 +26,8 @@ class TrackActivity : AppCompatActivity() {
         binding = ActivityTrackBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val getTrackUseCase = Creator.provideGetTrackUseCase(intent)
-        val track = getTrackUseCase.execute()
-
         viewModel =
-            ViewModelProvider(this, PlayerViewModel.getViewModelFactory(track))[PlayerViewModel::class.java]
+            ViewModelProvider(this, PlayerViewModel.getViewModelFactory(intent))[PlayerViewModel::class.java]
         viewModel.observeState().observe(this) {
             render(it)
         }
@@ -39,7 +35,7 @@ class TrackActivity : AppCompatActivity() {
         viewModel.preparePlayer()
         setPlayBtnListener()
 
-        setTrackData(track)
+        setTrackData(viewModel.getTrack())
 
         setBackBtnListener()
     }

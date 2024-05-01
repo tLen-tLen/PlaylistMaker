@@ -1,6 +1,7 @@
 package com.example.playlistmaker.player.presentation
 
 import android.app.Application
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.AndroidViewModel
@@ -22,8 +23,10 @@ class PlayerViewModel(
 ) : AndroidViewModel(application) {
 
     companion object {
-        fun getViewModelFactory(track: ITunesTrack): ViewModelProvider.Factory = viewModelFactory {
+        fun getViewModelFactory(intent: Intent): ViewModelProvider.Factory = viewModelFactory {
             initializer {
+                val trackUseCase = Creator.provideGetTrackUseCase(intent)
+                val track = trackUseCase.execute()
                 val interactor = Creator.provideGetPlayerInteractor()
                 PlayerViewModel(track, interactor, this[APPLICATION_KEY] as Application)
             }
@@ -92,5 +95,9 @@ class PlayerViewModel(
                 }, PLAY_TIME_DELAY)
             }
         })
+    }
+
+    fun getTrack(): ITunesTrack {
+        return track
     }
 }
