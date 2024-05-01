@@ -10,11 +10,11 @@ class TrackInfoRepositoryImpl(private val intent: Intent): TrackInfoRepository {
 
     override fun getTrack(): ITunesTrack {
         val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(Consts.getBundleKeyForTrack(), ITunesTrack::class.java)
+            intent.getSerializableExtra(Consts.getBundleKeyForTrack(), ITunesTrack::class.java)
         } else {
-            intent.getParcelableExtra(Consts.getBundleKeyForTrack())
+            intent.getSerializableExtra(Consts.getBundleKeyForTrack())
         }
 
-        return track!!
+        return (track as ITunesTrack?)!!
     }
 }

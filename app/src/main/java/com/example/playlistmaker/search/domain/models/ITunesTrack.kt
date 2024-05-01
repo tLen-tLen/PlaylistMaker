@@ -1,9 +1,7 @@
 package com.example.playlistmaker.search.domain.models
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
-@Parcelize
 data class ITunesTrack(
     val trackId: Long,
     val trackName: String,
@@ -15,4 +13,4 @@ data class ITunesTrack(
     val primaryGenreName: String,
     val releaseDate: String,
     val previewUrl: String?
-): Parcelable
+) : Serializable
