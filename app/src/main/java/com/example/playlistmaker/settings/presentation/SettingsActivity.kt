@@ -18,6 +18,9 @@ class SettingsActivity : AppCompatActivity() {
             this,
             SettingsViewModel.getViewModelFactory()
         )[SettingsViewModel::class.java]
+        viewModel.observeState().observe(this) {
+            render(it)
+        }
 
         setCurrentTheme(viewModel)
         setBackBtnListener()
@@ -25,6 +28,10 @@ class SettingsActivity : AppCompatActivity() {
         setSupportBtnListener(viewModel)
         setTermsOfUseBtnListener(viewModel)
         setThemeSwitcherListener(viewModel)
+    }
+
+    private fun render(isDarkTheme: Boolean) {
+        binding.themeSwitcher.isChecked = isDarkTheme
     }
 
     private fun setCurrentTheme(viewModel: SettingsViewModel) {
@@ -57,6 +64,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    // todo убрать метод
     private fun setTermsOfUseBtnListener(viewModel: SettingsViewModel) {
         binding.termsOfUse.setOnClickListener {
             viewModel.onUserAgreementPressed()

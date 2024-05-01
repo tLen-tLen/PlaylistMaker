@@ -15,15 +15,13 @@ import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.playlistmaker.search.domain.api.TracksInteractor
 
 class SearchViewModel(
-    application: Application
+    application: Application,
+    private val interactor: TracksInteractor,
+    private val handler: Handler
 ): AndroidViewModel(application) {
     private val stateLiveData = MutableLiveData<SearchScreenState>()
 
     fun observeState(): LiveData<SearchScreenState> = stateLiveData
-
-    private val interactor = Creator.provideTracksInteractor(application)
-
-    private val handler = Handler(Looper.getMainLooper())
 
     private var lastSearchText: String = ""
 
@@ -87,7 +85,10 @@ class SearchViewModel(
     companion object {
         fun getModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                SearchViewModel(this[APPLICATION_KEY] as Application)
+                val application = this[APPLICATION_KEY] as Application
+                val interactor = Creator.provideTracksInteractor(application)
+                val handler = Handler(Looper.getMainLooper())
+                SearchViewModel(application, interactor, handler)
             }
         }
 

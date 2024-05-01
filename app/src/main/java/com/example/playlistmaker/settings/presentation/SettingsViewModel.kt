@@ -1,6 +1,8 @@
 package com.example.playlistmaker.settings.presentation
 
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
@@ -15,6 +17,11 @@ class SettingsViewModel(
     private val sharingInteractor: SharingInteractor,
     private val settingsInteractor: SettingsInteractor,
 ): AndroidViewModel(application) {
+
+    private val stateLiveData = MutableLiveData<Boolean>()
+
+    fun observeState(): LiveData<Boolean> = stateLiveData
+
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -40,6 +47,7 @@ class SettingsViewModel(
 
     fun onThemeSwitchedPressed(isChecked: Boolean) {
         application.switchTheme(isChecked)
+        stateLiveData.postValue(isChecked)
         settingsInteractor.updateThemeSettings(isChecked)
     }
 
