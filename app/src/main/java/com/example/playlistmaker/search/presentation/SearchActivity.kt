@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.search.domain.models.ITunesTrack
-import com.example.playlistmaker.domain.enums.TrackListStatus
+import com.example.playlistmaker.player.domain.enums.TrackListStatus
 import com.example.playlistmaker.search.data.SearchHistory
 
 class SearchActivity : AppCompatActivity() {

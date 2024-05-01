@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.usecases
+package com.example.playlistmaker.player.domain.usecases
 
 import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.vehicle_shop_clean.domain.repository.TrackInfoRepository

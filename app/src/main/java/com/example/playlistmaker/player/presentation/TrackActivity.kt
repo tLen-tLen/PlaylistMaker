@@ -1,30 +1,26 @@
-package com.example.playlistmaker.ui.track
+package com.example.playlistmaker.player.presentation
 
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
-import com.example.playlistmaker.domain.enums.PlayerStatus
 import com.example.playlistmaker.search.domain.models.ITunesTrack
-import com.example.playlistmaker.utils.DateTimeConverter
-import com.example.playlistmaker.utils.SizeConverter
+import com.example.playlistmaker.utils.converters.DateTimeConverter
+import com.example.playlistmaker.utils.converters.SizeConverter
 
 import java.time.ZonedDateTime
 
 
 class TrackActivity : AppCompatActivity() {
 
+    private lateinit var viewModel: PlayerViewModel
+
     private lateinit var binding: ActivityTrackBinding
-
-    private val handler = Handler(Looper.getMainLooper())
-
-    private val playerInteractor = Creator.provideGetPlayerInteractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,24 +30,63 @@ class TrackActivity : AppCompatActivity() {
         val getTrackUseCase = Creator.provideGetTrackUseCase(intent)
         val track = getTrackUseCase.execute()
 
-        track?.let {
-            setTrackData(track)
-            preparePlayer(track)
+        viewModel =
+            ViewModelProvider(this, PlayerViewModel.getViewModelFactory(track))[PlayerViewModel::class.java]
+        viewModel.observeState().observe(this) {
+            render(it)
         }
 
-        setBackBtnListener()
+        viewModel.preparePlayer()
         setPlayBtnListener()
+
+        setTrackData(track)
+
+        setBackBtnListener()
     }
 
     override fun onPause() {
         super.onPause()
-        playerInteractor.pausePlayer()
+        viewModel.pausePlayer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerInteractor.releasePlayer()
-        handler.removeCallbacks(playTimeRunnable)
+        viewModel.releasePlayer()
+    }
+
+    private fun render(state: PlayerScreenState) {
+        when (state) {
+            is PlayerScreenState.DefaultScreenState -> showDefaultScreen()
+            is PlayerScreenState.PreparedScreenState -> showPreparedScreen()
+            is PlayerScreenState.PlayingScreenState -> showPlayingScreen()
+            is PlayerScreenState.PauseScreenState -> showPauseScreen()
+            is PlayerScreenState.TimerState -> setPlaybackTime(state.playbackTimer)
+        }
+    }
+
+    private fun showDefaultScreen() {
+        binding.playBtn.setBackgroundResource(R.drawable.play_btn)
+        binding.playBtn.isEnabled = false
+    }
+
+    private fun showPreparedScreen() {
+        binding.playBtn.setBackgroundResource(R.drawable.play_btn)
+        binding.playBtn.isEnabled = true
+        binding.currentTimeTv.text = DEFAULT_PLAY_TIME
+    }
+
+    private fun showPlayingScreen() {
+        binding.playBtn.setBackgroundResource(R.drawable.pause_btn)
+        binding.playBtn.isEnabled = true
+    }
+
+    private fun showPauseScreen() {
+        binding.playBtn.setBackgroundResource(R.drawable.play_btn)
+        binding.playBtn.isEnabled = true
+    }
+
+    private fun setPlaybackTime(time: String) {
+        binding.currentTimeTv.text = time
     }
 
     /**
@@ -89,44 +124,11 @@ class TrackActivity : AppCompatActivity() {
      */
     private fun setPlayBtnListener() {
         binding.playBtn.setOnClickListener {
-            playerInteractor.playbackControl()
-        }
-    }
-
-    private fun preparePlayer(track: ITunesTrack) {
-        if (track.previewUrl !== null) {
-            playerInteractor.preparePlayer(track)
-            playerInteractor.setOnCompletionListener {
-                handler.removeCallbacks(playTimeRunnable)
-                binding.currentTimeTv.text = DEFAULT_PLAY_TIME
-            }
-            playerInteractor.setAfterStartListener {
-                binding.playBtn.setBackgroundResource(R.drawable.pause_btn)
-                handler.post(playTimeRunnable)
-            }
-            playerInteractor.setAfterPauseListener {
-                binding.playBtn.setBackgroundResource(R.drawable.play_btn)
-                handler.removeCallbacks(playTimeRunnable)
-            }
-        } else {
-            binding.playBtn.isEnabled = false
-        }
-    }
-
-    private val playTimeRunnable = object : Runnable {
-        override fun run() {
-            if (playerInteractor.getPlayerStatus() == PlayerStatus.STATE_PLAYING) {
-                binding.currentTimeTv.text =
-                    DateTimeConverter.millisToMmSs(playerInteractor.getCurrentPosition())
-                handler.postDelayed(this, PLAY_TIME_DELAY)
-            }
+            viewModel.playbackControl()
         }
     }
 
     companion object {
-        const val BUNDLE_KEY_TRACK: String = "track"
-
-        private const val PLAY_TIME_DELAY = 300L
         private const val DEFAULT_PLAY_TIME = "00:00"
     }
 }

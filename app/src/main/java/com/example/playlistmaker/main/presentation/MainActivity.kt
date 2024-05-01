@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.example.playlistmaker.search.presentation.SearchActivity
 import com.example.playlistmaker.settings.presentation.SettingsActivity
 import com.example.playlistmaker.databinding.ActivityMainBinding
-import com.example.playlistmaker.ui.library.LibraryActivity
+import com.example.playlistmaker.library.presentation.LibraryActivity
 
 class MainActivity : AppCompatActivity() {
 

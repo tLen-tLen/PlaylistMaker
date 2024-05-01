@@ -7,8 +7,9 @@ import android.os.Looper
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.search.data.SearchHistory
-import com.example.playlistmaker.ui.track.TrackActivity
+import com.example.playlistmaker.player.presentation.TrackActivity
 import com.example.playlistmaker.search.domain.models.ITunesTrack
+import com.example.playlistmaker.utils.Consts
 
 class TrackListAdapter(
     val trackList: MutableList<ITunesTrack>,
@@ -33,7 +34,7 @@ class TrackListAdapter(
                 writeToHistory(item)
 
                 val intent = Intent(holder.itemView.context, TrackActivity::class.java)
-                intent.putExtra(TrackActivity.BUNDLE_KEY_TRACK, item)
+                intent.putExtra(Consts.getBundleKeyForTrack(), item)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 holder.itemView.context.startActivity(intent)
             }

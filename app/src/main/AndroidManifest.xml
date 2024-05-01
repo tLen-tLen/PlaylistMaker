@@ -17,7 +17,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.track.TrackActivity"
+            android:name=".player.presentation.TrackActivity"
             android:exported="false"
             android:theme="@style/Theme.SearchTheme" />
         <activity
@@ -25,7 +25,7 @@
             android:exported="false"
             android:theme="@style/Theme.SearchTheme" />
         <activity
-            android:name=".ui.library.LibraryActivity"
+            android:name=".library.presentation.LibraryActivity"
             android:exported="false" />
         <activity
             android:name=".settings.presentation.SettingsActivity"
