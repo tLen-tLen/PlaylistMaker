@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Build
 import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.playlistmaker.utils.Consts
-import com.example.vehicle_shop_clean.domain.repository.TrackInfoRepository
+import com.example.playlistmaker.player.domain.repository.TrackInfoRepository
 
 class TrackInfoRepositoryImpl(private val intent: Intent): TrackInfoRepository {
 

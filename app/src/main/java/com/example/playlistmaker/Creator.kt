@@ -22,7 +22,7 @@ import com.example.playlistmaker.settings.domain.api.ExternalNavigator
 import com.example.playlistmaker.settings.domain.api.SettingsInteractor
 import com.example.playlistmaker.settings.domain.api.SettingsRepository
 import com.example.playlistmaker.settings.domain.api.SharingInteractor
-import com.example.vehicle_shop_clean.domain.repository.TrackInfoRepository
+import com.example.playlistmaker.player.domain.repository.TrackInfoRepository
 
 object Creator {
     private const val SHARED_PREFERENCE = "SHARED_PREFERENCE"

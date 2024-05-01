@@ -1,4 +1,4 @@
-package com.example.vehicle_shop_clean.domain.repository
+package com.example.playlistmaker.player.domain.repository
 
 import com.example.playlistmaker.search.domain.models.ITunesTrack
 
