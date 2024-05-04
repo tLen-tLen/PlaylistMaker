@@ -22,6 +22,10 @@ class SettingsViewModel(
 
     fun observeState(): LiveData<Boolean> = stateLiveData
 
+    init {
+        stateLiveData.value = settingsInteractor.isDarkTheme()
+    }
+
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -49,9 +53,5 @@ class SettingsViewModel(
         application.switchTheme(isChecked)
         stateLiveData.postValue(isChecked)
         settingsInteractor.updateThemeSettings(isChecked)
-    }
-
-    fun getDarkThemeIsEnabled(): Boolean {
-        return settingsInteractor.isDarkTheme()
     }
 }

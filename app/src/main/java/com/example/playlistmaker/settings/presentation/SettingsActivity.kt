@@ -22,7 +22,6 @@ class SettingsActivity : AppCompatActivity() {
             render(it)
         }
 
-        setCurrentTheme(viewModel)
         setBackBtnListener()
         setShareBtnListener(viewModel)
         setSupportBtnListener(viewModel)
@@ -32,12 +31,6 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun render(isDarkTheme: Boolean) {
         binding.themeSwitcher.isChecked = isDarkTheme
-    }
-
-    private fun setCurrentTheme(viewModel: SettingsViewModel) {
-        if (viewModel.getDarkThemeIsEnabled()) {
-            binding.themeSwitcher.isChecked = true
-        }
     }
 
     private fun setThemeSwitcherListener(viewModel: SettingsViewModel) {
@@ -64,7 +57,6 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    // todo убрать метод
     private fun setTermsOfUseBtnListener(viewModel: SettingsViewModel) {
         binding.termsOfUse.setOnClickListener {
             viewModel.onUserAgreementPressed()
