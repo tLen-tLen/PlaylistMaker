@@ -11,7 +11,10 @@
     <style name="Theme.SettingsTheme" parent="Base.Theme.PlaylistMaker">
         <item name="android:background">@color/white</item>
         <item name="colorOnPrimary">@color/YP_black</item>
+        <item name="colorSecondary">@color/blue_main</item>
         <item name="customReference">@drawable/arrow_black</item>
+        <item name="thumbTint">@color/YP_grey_secondary</item>
+        <item name="trackTint">@color/YP_gray_light</item>
     </style>
     <style name="Theme.SearchTheme" parent="Base.Theme.PlaylistMaker">
         <item name="android:background">@color/white</item>

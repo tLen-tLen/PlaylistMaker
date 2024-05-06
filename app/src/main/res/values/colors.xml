@@ -15,4 +15,6 @@
 
     <color name="track_info">#AEAFB4</color>
     <color name="track_info_data">#1A1B22</color>
+
+    <color name="YP_grey_secondary">#AEAFB4</color>
 </resources>

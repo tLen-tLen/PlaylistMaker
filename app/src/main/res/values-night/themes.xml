@@ -7,6 +7,8 @@
         <item name="android:background">@color/YP_black</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="customReference">@drawable/arrow_white</item>
+        <item name="thumbTint">@color/blue_main</item>
+        <item name="trackTint">@color/blue_main</item>
     </style>
     <style name="Theme.SearchTheme" parent="Base.Theme.PlaylistMaker">
         <item name="android:background">@color/YP_black</item>

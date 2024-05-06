@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.SettingsTheme">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,30 +40,19 @@
         android:layout_marginStart="16dp"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/themeSwitcher"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white"
+            android:text="@string/dark_theme"
+            android:layout_gravity="start"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/settings_item_size"
             android:layout_marginTop="@dimen/settings_item_mt"
-            android:layout_marginBottom="@dimen/settings_item_mb"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/dark_theme"
-                android:textColor="?attr/colorOnPrimary"
-                android:textSize="@dimen/settings_item_size" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/themeSwitcher"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="6dp"
-                android:backgroundTint="#966456" />
-        </LinearLayout>
-
+            android:layout_marginEnd="@dimen/settings_item_me"
+            android:fontFamily="@font/ys_display_regular"
+            style="@style/Switch"/>
 
         <TextView
             android:id="@+id/share"
@@ -82,7 +72,6 @@
             android:text="@string/write_support"
             app:drawableEndCompat="@drawable/support" />
 
-
         <TextView
             android:id="@+id/terms_of_use"
             style="@style/SettingsItemTextView"
@@ -91,7 +80,6 @@
             android:layout_gravity="start"
             android:text="@string/terms_of_use"
             app:drawableEndCompat="@drawable/arrow_forward" />
-
 
     </LinearLayout>
 </LinearLayout>

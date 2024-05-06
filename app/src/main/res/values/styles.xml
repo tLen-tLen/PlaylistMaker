@@ -50,4 +50,10 @@
         <item name="android:layout_marginEnd">@dimen/margin_32</item>
     </style>
 
+    <style name="Switch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/blue_main</item>
+        <item name="colorSwitchThumbNormal">@color/blue_main</item>
+        <item name="android:colorForeground">@color/blue_main</item>
+    </style>
+
 </resources>
