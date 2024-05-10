@@ -1,26 +1,42 @@
 package com.example.playlistmaker
 
+import android.content.Context
 import android.content.Intent
-import com.example.playlistmaker.data.TracksRepositoryImpl
-import com.example.playlistmaker.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.data.repository.PlayerRepositoryImpl
-import com.example.playlistmaker.data.repository.TrackInfoRepositoryImpl
-import com.example.playlistmaker.domain.api.PlayerInteractor
-import com.example.playlistmaker.domain.api.TracksInteractor
-import com.example.playlistmaker.domain.api.TracksRepository
-import com.example.playlistmaker.domain.impl.PlayerInteractorImpl
-import com.example.playlistmaker.domain.impl.TracksInteractorImpl
-import com.example.playlistmaker.domain.repository.PlayerRepository
-import com.example.playlistmaker.domain.usecases.GetTrackUseCase
-import com.example.vehicle_shop_clean.domain.repository.TrackInfoRepository
+import android.media.MediaPlayer
+import com.example.playlistmaker.search.data.TracksRepositoryImpl
+import com.example.playlistmaker.search.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.player.data.repository.PlayerRepositoryImpl
+import com.example.playlistmaker.player.data.repository.TrackInfoRepositoryImpl
+import com.example.playlistmaker.player.domain.api.PlayerInteractor
+import com.example.playlistmaker.search.domain.api.TracksInteractor
+import com.example.playlistmaker.search.domain.api.TracksRepository
+import com.example.playlistmaker.player.domain.impl.PlayerInteractorImpl
+import com.example.playlistmaker.search.domain.impl.TracksInteractorImpl
+import com.example.playlistmaker.player.domain.repository.PlayerRepository
+import com.example.playlistmaker.player.domain.usecases.GetTrackUseCase
+import com.example.playlistmaker.search.data.SearchHistory
+import com.example.playlistmaker.settings.domain.impl.ExternalNavigatorImpl
+import com.example.playlistmaker.settings.domain.impl.SettingsInteractorImpl
+import com.example.playlistmaker.settings.domain.impl.SettingsRepositoryImpl
+import com.example.playlistmaker.settings.domain.impl.SharingInteractorImpl
+import com.example.playlistmaker.settings.domain.api.ExternalNavigator
+import com.example.playlistmaker.settings.domain.api.SettingsInteractor
+import com.example.playlistmaker.settings.domain.api.SettingsRepository
+import com.example.playlistmaker.settings.domain.api.SharingInteractor
+import com.example.playlistmaker.player.domain.repository.TrackInfoRepository
 
 object Creator {
-    private fun getTracksRepository(): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient())
+    private const val SHARED_PREFERENCE = "SHARED_PREFERENCE"
+
+    private fun getTracksRepository(context: Context): TracksRepository {
+        return TracksRepositoryImpl(
+            RetrofitNetworkClient(),
+            SearchHistory(context.getSharedPreferences(SHARED_PREFERENCE, Context.MODE_PRIVATE))
+        )
     }
 
-    fun provideTracksInteractor(): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository())
+    fun provideTracksInteractor(context: Context): TracksInteractor {
+        return TracksInteractorImpl(getTracksRepository(context))
     }
 
     fun provideGetTrackUseCase(intent: Intent): GetTrackUseCase {
@@ -36,6 +52,26 @@ object Creator {
     }
 
     private fun providePlayerRepository(): PlayerRepository {
-        return PlayerRepositoryImpl()
+        return PlayerRepositoryImpl(createMediaPlayer())
+    }
+
+    private fun createMediaPlayer(): MediaPlayer {
+        return MediaPlayer()
+    }
+
+    fun provideSettingsInteractor(context: Context): SettingsInteractor {
+        return SettingsInteractorImpl(getSettingsRepository(context))
+    }
+
+    private fun getSettingsRepository(context: Context) : SettingsRepository {
+        return SettingsRepositoryImpl(context.getSharedPreferences(SHARED_PREFERENCE,Context.MODE_PRIVATE))
+    }
+
+    fun provideSharingInteractor(context: Context): SharingInteractor {
+        return SharingInteractorImpl(getExternalNavigator(context))
+    }
+
+    private fun getExternalNavigator(context: Context) : ExternalNavigator {
+        return ExternalNavigatorImpl(context)
     }
 }
