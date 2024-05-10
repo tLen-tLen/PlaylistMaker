@@ -11,13 +11,13 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.playlistmaker.player.domain.enums.TrackListStatus
-import com.example.playlistmaker.search.data.SearchHistory
+import com.example.playlistmaker.search.data.SearchHistoryImpl
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
     companion object {
@@ -25,14 +25,14 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
 
     private var searchSavedData: String = ""
 
     private val trackDataList: MutableList<ITunesTrack> = mutableListOf()
     private lateinit var adapter: TrackListAdapter
 
-    private lateinit var history: SearchHistory
+    private lateinit var history: SearchHistoryImpl
     private var historyTracks = mutableListOf<ITunesTrack>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,14 +40,12 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel =
-            ViewModelProvider(this, SearchViewModel.getModelFactory())[SearchViewModel::class.java]
         viewModel.observeState().observe(this) {
             render(it)
         }
 
-        val prefs = getSharedPreferences(SearchHistory.HISTORY_SP, MODE_PRIVATE)
-        history = SearchHistory(prefs)
+        val prefs = getSharedPreferences(SearchHistoryImpl.HISTORY_SP, MODE_PRIVATE)
+        history = SearchHistoryImpl(prefs)
         adapter = TrackListAdapter(trackDataList, prefs)
 
         setBackBtnListener()

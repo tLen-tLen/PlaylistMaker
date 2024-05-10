@@ -14,7 +14,7 @@ import com.example.playlistmaker.player.domain.impl.PlayerInteractorImpl
 import com.example.playlistmaker.search.domain.impl.TracksInteractorImpl
 import com.example.playlistmaker.player.domain.repository.PlayerRepository
 import com.example.playlistmaker.player.domain.usecases.GetTrackUseCase
-import com.example.playlistmaker.search.data.SearchHistory
+import com.example.playlistmaker.search.data.SearchHistoryImpl
 import com.example.playlistmaker.settings.domain.impl.ExternalNavigatorImpl
 import com.example.playlistmaker.settings.domain.impl.SettingsInteractorImpl
 import com.example.playlistmaker.settings.domain.impl.SettingsRepositoryImpl
@@ -26,19 +26,6 @@ import com.example.playlistmaker.settings.domain.api.SharingInteractor
 import com.example.playlistmaker.player.domain.repository.TrackInfoRepository
 
 object Creator {
-    private const val SHARED_PREFERENCE = "SHARED_PREFERENCE"
-
-    private fun getTracksRepository(context: Context): TracksRepository {
-        return TracksRepositoryImpl(
-            RetrofitNetworkClient(),
-            SearchHistory(context.getSharedPreferences(SHARED_PREFERENCE, Context.MODE_PRIVATE))
-        )
-    }
-
-    fun provideTracksInteractor(context: Context): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository(context))
-    }
-
     fun provideGetTrackUseCase(intent: Intent): GetTrackUseCase {
         return GetTrackUseCase(getTrackInfoRepository(intent))
     }
@@ -57,21 +44,5 @@ object Creator {
 
     private fun createMediaPlayer(): MediaPlayer {
         return MediaPlayer()
-    }
-
-    fun provideSettingsInteractor(context: Context): SettingsInteractor {
-        return SettingsInteractorImpl(getSettingsRepository(context))
-    }
-
-    private fun getSettingsRepository(context: Context) : SettingsRepository {
-        return SettingsRepositoryImpl(context.getSharedPreferences(SHARED_PREFERENCE,Context.MODE_PRIVATE))
-    }
-
-    fun provideSharingInteractor(context: Context): SharingInteractor {
-        return SharingInteractorImpl(getExternalNavigator(context))
-    }
-
-    private fun getExternalNavigator(context: Context) : ExternalNavigator {
-        return ExternalNavigatorImpl(context)
     }
 }
