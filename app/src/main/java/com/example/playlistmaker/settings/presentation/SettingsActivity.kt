@@ -2,22 +2,20 @@ package com.example.playlistmaker.settings.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
+
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val viewModel = ViewModelProvider(
-            this,
-            SettingsViewModel.getViewModelFactory()
-        )[SettingsViewModel::class.java]
         viewModel.observeState().observe(this) {
             render(it)
         }
@@ -35,7 +33,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun setThemeSwitcherListener(viewModel: SettingsViewModel) {
         binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            viewModel.onThemeSwitchedPressed(checked)
+            viewModel.themeSwitch(checked)
         }
     }
 
@@ -53,13 +51,13 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun setSupportBtnListener(viewModel: SettingsViewModel) {
         binding.support.setOnClickListener {
-            viewModel.onSupportPressed()
+            viewModel.sendMainToSupport()
         }
     }
 
     private fun setTermsOfUseBtnListener(viewModel: SettingsViewModel) {
         binding.termsOfUse.setOnClickListener {
-            viewModel.onUserAgreementPressed()
+            viewModel.openUserAgreement()
         }
     }
 }
