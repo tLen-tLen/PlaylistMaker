@@ -1,37 +1,21 @@
 package com.example.playlistmaker.player.presentation
 
-import android.app.Application
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.Creator
+import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.playlistmaker.utils.converters.DateTimeConverter
 
+
 class PlayerViewModel(
     private val track: ITunesTrack,
-    private val playerInteractor: PlayerInteractor,
-    application: Application
-) : AndroidViewModel(application) {
+    private val playerInteractor: PlayerInteractor
+) : ViewModel() {
 
     companion object {
-        fun getViewModelFactory(intent: Intent): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val trackUseCase = Creator.provideGetTrackUseCase(intent)
-                val track = trackUseCase.execute()
-                val interactor = Creator.provideGetPlayerInteractor()
-                PlayerViewModel(track, interactor, this[APPLICATION_KEY] as Application)
-            }
-        }
-
         private const val PLAY_TIME_DELAY = 300L
     }
 

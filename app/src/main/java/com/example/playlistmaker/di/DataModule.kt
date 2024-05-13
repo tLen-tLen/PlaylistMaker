@@ -1,6 +1,7 @@
 package com.example.playlistmaker.di
 
 import android.content.Context
+import android.media.MediaPlayer
 import com.example.playlistmaker.search.data.NetworkClient
 import com.example.playlistmaker.search.data.SearchHistoryImpl
 import com.example.playlistmaker.search.data.network.ITunesApi
@@ -39,5 +40,9 @@ val dataModule = module {
 
     single<SearchHistory> {
         SearchHistoryImpl(get())
+    }
+
+    factory {
+        MediaPlayer()
     }
 }
