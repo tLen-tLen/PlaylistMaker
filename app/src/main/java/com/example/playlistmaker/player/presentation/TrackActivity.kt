@@ -1,23 +1,30 @@
 package com.example.playlistmaker.player.presentation
 
 
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityTrackBinding
 import com.example.playlistmaker.search.domain.models.ITunesTrack
+import com.example.playlistmaker.utils.Consts
 import com.example.playlistmaker.utils.converters.DateTimeConverter
 import com.example.playlistmaker.utils.converters.SizeConverter
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 import java.time.ZonedDateTime
 
 
 class TrackActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: PlayerViewModel
+    private lateinit var track: ITunesTrack
+
+    private val viewModel: PlayerViewModel by viewModel {
+        parametersOf(track)
+    }
 
     private lateinit var binding: ActivityTrackBinding
 
@@ -26,8 +33,8 @@ class TrackActivity : AppCompatActivity() {
         binding = ActivityTrackBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel =
-            ViewModelProvider(this, PlayerViewModel.getViewModelFactory(intent))[PlayerViewModel::class.java]
+        track = getTrack()
+
         viewModel.observeState().observe(this) {
             render(it)
         }
@@ -122,6 +129,16 @@ class TrackActivity : AppCompatActivity() {
         binding.playBtn.setOnClickListener {
             viewModel.playbackControl()
         }
+    }
+
+    private fun getTrack(): ITunesTrack {
+        val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra(Consts.getBundleKeyForTrack(), ITunesTrack::class.java)
+        } else {
+            intent.getSerializableExtra(Consts.getBundleKeyForTrack())
+        }
+
+        return (track as ITunesTrack?)!!
     }
 
     companion object {

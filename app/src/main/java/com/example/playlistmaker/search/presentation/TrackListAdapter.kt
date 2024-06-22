@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.search.data.SearchHistory
+import com.example.playlistmaker.search.data.SearchHistoryImpl
 import com.example.playlistmaker.player.presentation.TrackActivity
 import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.playlistmaker.utils.Consts
@@ -48,7 +48,7 @@ class TrackListAdapter(
     }
 
     private fun writeToHistory(track: ITunesTrack) {
-        val history = SearchHistory(pref)
+        val history = SearchHistoryImpl(pref)
         history.write(track)
     }
 
