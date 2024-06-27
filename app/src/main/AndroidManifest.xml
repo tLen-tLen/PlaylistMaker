@@ -27,7 +27,7 @@
         <activity
             android:name=".library.presentation.LibraryActivity"
             android:exported="false"
-            android:theme="@style/Theme.SearchTheme" />
+            android:theme="@style/Theme.LibraryTheme" />
         <activity
             android:name=".settings.presentation.SettingsActivity"
             android:exported="false"

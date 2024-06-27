@@ -22,4 +22,9 @@
         <item name="customReference">@drawable/arrow_black</item>
         <item name="colorPrimaryContainer">@color/YP_gray</item>
     </style>
+    <style name="Theme.LibraryTheme" parent="Base.Theme.PlaylistMaker">
+        <item name="colorOnPrimary">@color/YP_black</item>
+        <item name="customReference">@drawable/arrow_black</item>
+        <item name="colorPrimaryContainer">@color/YP_gray</item>
+    </style>
 </resources>
