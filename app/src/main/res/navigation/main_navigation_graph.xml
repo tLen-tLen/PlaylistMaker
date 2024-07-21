@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation_graph"
-    app:startDestination="@id/mediaLibraryFragment">
+    app:startDestination="@id/libraryFragment">
     <fragment
-        android:id="@+id/mediaLibraryFragment"
+        android:id="@+id/libraryFragment"
         android:name="com.example.playlistmaker.library.presentation.LibraryFragment"
         android:label="fragment_media_library"
         tools:layout="@layout/fragment_library" />
