@@ -2,32 +2,29 @@ package com.example.playlistmaker.search.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.domain.models.ITunesTrack
 import com.example.playlistmaker.player.domain.enums.TrackListStatus
 import com.example.playlistmaker.search.data.SearchHistoryImpl
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
-    companion object {
-        private const val SEARCH_STRING_KEY = "search_string"
-    }
+class SearchFragment : Fragment() {
 
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModel()
-
-    private var searchSavedData: String = ""
 
     private val trackDataList: MutableList<ITunesTrack> = mutableListOf()
     private lateinit var adapter: TrackListAdapter
@@ -35,20 +32,23 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var history: SearchHistoryImpl
     private var historyTracks = mutableListOf<ITunesTrack>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
 
-        viewModel.observeState().observe(this) {
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        val prefs = getSharedPreferences(SearchHistoryImpl.HISTORY_SP, MODE_PRIVATE)
+        val prefs = requireActivity().getSharedPreferences(SearchHistoryImpl.HISTORY_SP, MODE_PRIVATE)
         history = SearchHistoryImpl(prefs)
         adapter = TrackListAdapter(trackDataList, prefs)
 
-        setBackBtnListener()
         setClearBtnListener(prefs)
         setSearchWatcher()
         setSearchActionListener()
@@ -58,8 +58,8 @@ class SearchActivity : AppCompatActivity() {
         initHistoryList()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         viewModel.removeCallbacks()
     }
 
@@ -164,17 +164,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val searchSavedData = findViewById<EditText>(R.id.search_string).text.toString()
-        outState.putString(SEARCH_STRING_KEY, searchSavedData)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        searchSavedData = savedInstanceState.getString(SEARCH_STRING_KEY) ?: ""
-    }
-
     /**
      * Установка слушателя на кнопку "очистить строку поиска" (крестик)
      */
@@ -182,7 +171,7 @@ class SearchActivity : AppCompatActivity() {
         binding.clearSearchBtn.setOnClickListener {
             binding.searchString.setText("")
             val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.searchString?.windowToken, 0)
             trackDataList.clear()
 
@@ -228,19 +217,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     /**
-     * Установка слушателя на кнопку "назад"
-     */
-    private fun setBackBtnListener() {
-        binding.back.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-    }
-
-    /**
      * Инициализация списка песен
      */
     private fun initTrackList() {
-        binding.rvTracks.layoutManager = LinearLayoutManager(this)
+        binding.rvTracks.layoutManager = LinearLayoutManager(requireActivity())
         binding.rvTracks.adapter = adapter
     }
 

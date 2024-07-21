@@ -21,20 +21,9 @@
             android:exported="false"
             android:theme="@style/Theme.SearchTheme" />
         <activity
-            android:name=".search.presentation.SearchActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SearchTheme" />
-        <activity
-            android:name=".library.presentation.LibraryActivity"
-            android:exported="false"
-            android:theme="@style/Theme.LibraryTheme" />
-        <activity
-            android:name=".settings.presentation.SettingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SettingsTheme" />
-        <activity
             android:name=".main.presentation.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
