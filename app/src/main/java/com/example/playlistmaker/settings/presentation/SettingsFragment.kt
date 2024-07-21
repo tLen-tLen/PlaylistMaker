@@ -1,26 +1,34 @@
 package com.example.playlistmaker.settings.presentation
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment : Fragment() {
 
-    private lateinit var binding: ActivitySettingsBinding
+    private lateinit var binding: FragmentSettingsBinding
 
     private val viewModel: SettingsViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreate(savedInstanceState)
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        viewModel.observeState().observe(this) {
+        binding = FragmentSettingsBinding.inflate(layoutInflater)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        setBackBtnListener()
         setShareBtnListener(viewModel)
         setSupportBtnListener(viewModel)
         setTermsOfUseBtnListener(viewModel)
@@ -34,12 +42,6 @@ class SettingsActivity : AppCompatActivity() {
     private fun setThemeSwitcherListener(viewModel: SettingsViewModel) {
         binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
             viewModel.themeSwitch(checked)
-        }
-    }
-
-    private fun setBackBtnListener() {
-        binding.back.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
         }
     }
 
