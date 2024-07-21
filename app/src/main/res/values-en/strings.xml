@@ -26,4 +26,11 @@
     <string name="country">Country</string>
     <string name="title">Title</string>
     <string name="artist">Artist</string>
+
+    <string name="library">Media library</string>
+    <string name="library_empty">Your media library is empty</string>
+    <string name="no_playlists">You haven\'t created \n any playlists</string>
+    <string name="new_playlist">New playlist</string>
+    <string name="favourite_tracks">Featured tracks</string>
+    <string name="playlists">Playlists</string>
 </resources>
