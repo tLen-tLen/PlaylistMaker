@@ -7,7 +7,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/search_container"
-    tools:context=".search.presentation.SearchFragment">
+    tools:context=".search.presentation.SearchFragment"
+    android:theme="@style/Theme.SearchTheme">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/title_cl"
